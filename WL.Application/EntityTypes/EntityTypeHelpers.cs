@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
+
 using WL.Application.EntityTypes.Commands;
 using WL.Domain;
 
@@ -24,7 +22,7 @@ namespace WL.Application.EntityTypes {
         SupportedDocuments = cmd.SupportedDocumentTypesIds
           .Select(id => new EntityTypeDocumentType {
             DocumentTypeId = id
-          }).AsQueryable()
+          }).ToList()
       };
 
     public static EntityType CreateEntityTypeFrom(UpdateEntityTypeCommand cmd)
@@ -34,7 +32,7 @@ namespace WL.Application.EntityTypes {
         SupportedDocuments = cmd.SupportedDocumentTypesIds
           .Select(id => new EntityTypeDocumentType {
             DocumentTypeId = id
-          })
+          }).ToList()
       };
   }
 }

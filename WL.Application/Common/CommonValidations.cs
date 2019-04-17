@@ -1,7 +1,9 @@
 ﻿using LanguageExt;
 
 using System;
+
 using WL.Application.Common.Errors;
+
 using static LanguageExt.Prelude;
 
 namespace WL.Application.Common {

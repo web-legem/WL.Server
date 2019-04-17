@@ -1,9 +1,10 @@
 ﻿using LanguageExt;
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 using WL.Application.Interfaces.Persistance;
+
 using static LanguageExt.Prelude;
 
 namespace WL.Application.DocumentTypes.Queries {

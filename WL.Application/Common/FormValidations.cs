@@ -1,7 +1,9 @@
 ﻿using LanguageExt;
 
 using System;
+
 using WL.Application.Common.Errors;
+
 using static WL.Application.Common.CommonValidations;
 using static WL.Application.Common.LongValidations;
 using static WL.Application.Common.StringValidations;

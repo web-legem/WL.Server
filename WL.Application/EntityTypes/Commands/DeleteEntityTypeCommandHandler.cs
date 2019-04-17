@@ -4,12 +4,12 @@ using WL.Application.Interfaces.Persistance;
 
 using static LanguageExt.Prelude;
 
-namespace WL.Application.DocumentTypes.Commands {
+namespace WL.Application.EntityTypes.Commands {
 
-  public class DeleteDocumentTypeCommandHandler {
-    readonly IDocumentTypeRepository repository;
+  public class DeleteEntityTypeCommandHandler {
+    readonly IEntityTypeRepository repository;
 
-    public DeleteDocumentTypeCommandHandler(IDocumentTypeRepository repository) {
+    public DeleteEntityTypeCommandHandler(IEntityTypeRepository repository) {
       this.repository = repository;
     }
 

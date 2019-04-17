@@ -1,9 +1,6 @@
 ﻿using LanguageExt;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using WL.Application.Interfaces.Persistance;
-using static WL.Application.EntityTypes.EntityTypeHelpers;
 
 namespace WL.Application.EntityTypes.Queries {
 

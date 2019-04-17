@@ -1,9 +1,7 @@
 ﻿using LanguageExt;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using WL.Application.Common.Errors;
-using static WL.Application.Common.CommonValidations;
+
 using static WL.Application.Common.FormValidations;
 
 namespace WL.Application.EntityTypes {

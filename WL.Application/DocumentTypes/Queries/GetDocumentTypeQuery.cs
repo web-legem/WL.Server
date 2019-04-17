@@ -1,7 +1,5 @@
 ﻿using LanguageExt;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using WL.Application.Interfaces.Persistance;
 
 namespace WL.Application.DocumentTypes.Queries {

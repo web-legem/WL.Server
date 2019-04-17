@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+
 using System.Linq;
-using System.Text;
+
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
 

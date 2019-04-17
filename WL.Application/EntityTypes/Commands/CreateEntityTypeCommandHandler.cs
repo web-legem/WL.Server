@@ -1,20 +1,16 @@
 ﻿using LanguageExt;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using WL.Application.Common.Errors;
 using WL.Application.Interfaces.Persistance;
-using WL.Domain;
+
 using static WL.Application.Common.CommonValidations;
-using static WL.Application.EntityTypes.EntityTypeValidations;
 using static WL.Application.EntityTypes.EntityTypeHelpers;
+using static WL.Application.EntityTypes.EntityTypeValidations;
 
 namespace WL.Application.EntityTypes.Commands {
 
   public class CreateEntityTypeCommandHandler {
     readonly IEntityTypeRepository repository;
-    readonly IDocumentTypeRepository documentTypeRepository;
 
     public CreateEntityTypeCommandHandler(IEntityTypeRepository repository) {
       this.repository = repository;

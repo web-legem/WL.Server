@@ -1,9 +1,9 @@
 ﻿using LanguageExt;
+
 using WL.Application.Common.Errors;
 using WL.Application.Interfaces.Persistance;
 
 using static WL.Application.Common.CommonValidations;
-using static WL.Application.Common.FormValidations;
 using static WL.Application.DocumentTypes.DocumentTypeHelpers;
 using static WL.Application.DocumentTypes.DocumentTypeValidations;
 

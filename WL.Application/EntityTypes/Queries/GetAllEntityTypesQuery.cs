@@ -1,9 +1,10 @@
 ﻿using LanguageExt;
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 using WL.Application.Interfaces.Persistance;
+
 using static LanguageExt.Prelude;
 
 namespace WL.Application.EntityTypes.Queries {
@@ -15,7 +16,7 @@ namespace WL.Application.EntityTypes.Queries {
       this.repository = repository;
     }
 
-    public Try<IQueryable<EntityTypeDto>> Execut() {
+    public Try<IQueryable<EntityTypeDto>> Execute() {
       Func<IQueryable<EntityTypeDto>> action =
         () => repository
         .GetAll()

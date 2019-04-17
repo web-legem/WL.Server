@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WL.Domain {
+﻿namespace WL.Domain {
 
   public class EntityTypeDocumentType {
     public long EntityTypeId { get; set; }

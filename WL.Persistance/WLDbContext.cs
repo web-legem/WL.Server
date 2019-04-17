@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 using WL.Domain;
 using WL.Persistance.AnnotationTypes;
@@ -25,6 +22,7 @@ namespace WL.Persistance {
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.ApplyConfiguration(new DocumentTypeConfig());
       modelBuilder.ApplyConfiguration(new EntityTypeConfig());
+      modelBuilder.ApplyConfiguration(new EntityTypeDocumentTypeConfig());
       modelBuilder.ApplyConfiguration(new EntityConfig());
       modelBuilder.ApplyConfiguration(new AnnotationTypeConfig());
       modelBuilder.ApplyConfiguration(new DocumentConfig());

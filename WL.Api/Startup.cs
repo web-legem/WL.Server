@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WL.Application.DocumentTypes.Commands;
-using WL.Application.DocumentTypes.Queries;
-using WL.Application.Interfaces.Persistance;
+
+using System;
+using System.IO;
+
+using WL.Api.Infrastructure;
 using WL.Persistance;
-using WL.Persistance.DocumentTypes;
 
 namespace WL.Api {
 
@@ -26,8 +25,10 @@ namespace WL.Api {
 
     public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services) {
-      services.AddMvc();
+    public IServiceProvider ConfigureServices(IServiceCollection services) {
+      services.AddMvc(options => {
+        options.ModelValidatorProviders.Clear();
+      });
       services.AddCors();
 
       var connectionString = Configuration["ConnectionStrings:DefaultConnection"];
@@ -35,12 +36,15 @@ namespace WL.Api {
         options.UseOracle(connectionString, b => b.MigrationsAssembly("WL.Persistance"));
       });
 
-      services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
-      services.AddScoped<GetDocumentTypeQuery>();
-      services.AddScoped<GetAllDocumentTypesQuery>();
-      services.AddScoped<CreateDocumentTypeCommandHandler>();
-      services.AddScoped<UpdateDocumentTypeCommandHandler>();
-      services.AddScoped<DeleteDocumentTypeCommandHandler>();
+      services.Configure<ApiBehaviorOptions>(options => {
+        options.SuppressModelStateInvalidFilter = true;
+      });
+
+      var containerBuilder = new ContainerBuilder();
+      containerBuilder.RegisterModule<AutofacModule>();
+      containerBuilder.Populate(services);
+      var container = containerBuilder.Build();
+      return new AutofacServiceProvider(container);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env) {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WL.Application.DocumentTypes.Commands;
+﻿using WL.Application.DocumentTypes.Commands;
 using WL.Domain;
 
 namespace WL.Application.DocumentTypes {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WL.Domain {
 
   public class File {
     public long FileId { get; set; }
 
-    [Requierd]
+    [Required]
     public string Name { get; set; }
 
     public string Issue { get; set; }

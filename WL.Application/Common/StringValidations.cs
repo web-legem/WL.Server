@@ -2,7 +2,9 @@
 
 using System;
 using System.Text.RegularExpressions;
+
 using WL.Application.Common.Errors;
+
 using static LanguageExt.Prelude;
 
 namespace WL.Application.Common {

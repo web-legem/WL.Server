@@ -1,9 +1,9 @@
 ﻿namespace WL.Api.Controllers {
 
-   public class ConsoleLogger {
+  public class ConsoleLogger {
 
-      public void Log(string message) {
-         System.Console.WriteLine($"ConsoleLogger: {message}");
-      }
-   }
+    public void Log(string message) {
+      System.Console.WriteLine($"ConsoleLogger: {message}");
+    }
+  }
 }

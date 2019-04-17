@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace WL.Application.EntityTypes.Commands {
 
   public class UpdateEntityTypeCommand {
     public long Id { get; set; }
     public string Name { get; set; }
-    public IQueryable<long> SupportedDocumentTypesIds { get; set; }
+    public List<long> SupportedDocumentTypesIds { get; set; }
   }
 }
