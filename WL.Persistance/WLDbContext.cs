@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 
 using WL.Domain;
+using WL.Persistance.AnnotationTypes;
+using WL.Persistance.Documents;
+using WL.Persistance.DocumentTypes;
+using WL.Persistance.Entities;
+using WL.Persistance.EntityTypes;
 
 namespace WL.Persistance {
 
@@ -18,15 +23,11 @@ namespace WL.Persistance {
       : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-      modelBuilder.Entity<Document>().HasIndex(document => new {
-        document.DocumentTypeId,
-        document.EntityTypeId,
-        document.Number,
-        document.PublicationDate
-      }).IsUnique();
-
-      modelBuilder.Entity<EntityTypeDocumentType>()
-        .HasKey(e => new { e.EntityTypeId, e.DocumentTypeId });
+      modelBuilder.ApplyConfiguration(new DocumentTypeConfig());
+      modelBuilder.ApplyConfiguration(new EntityTypeConfig());
+      modelBuilder.ApplyConfiguration(new EntityConfig());
+      modelBuilder.ApplyConfiguration(new AnnotationTypeConfig());
+      modelBuilder.ApplyConfiguration(new DocumentConfig());
     }
   }
 }

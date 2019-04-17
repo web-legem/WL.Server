@@ -16,12 +16,12 @@ namespace WL.Application.DocumentTypes.Queries {
     }
 
     public Try<IQueryable<DocumentTypeDto>> Execute() {
-      Func<IQueryable<DocumentTypeDto>> f =
+      Func<IQueryable<DocumentTypeDto>> query =
         () => repository
         .GetAll()
         .Select(x => x.ToDocumentTypeDto());
 
-      return Try(f);
+      return Try(query);
     }
   }
 }

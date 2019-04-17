@@ -6,7 +6,7 @@ using System.Text;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
 
-namespace WL.Persistance {
+namespace WL.Persistance.DocumentTypes {
 
   public class DocumentTypeRepository : IDocumentTypeRepository {
     readonly WLDbContext context;
@@ -25,6 +25,7 @@ namespace WL.Persistance {
 
     public DocumentType Create(DocumentType documentType) {
       context.DocumentTypes.Add(documentType);
+      context.SaveChanges();
       return documentType;
     }
 
@@ -38,6 +39,7 @@ namespace WL.Persistance {
     public void Delete(long id) {
       var original = Get(id);
       context.DocumentTypes.Remove(original);
+      context.SaveChanges();
     }
   }
 }

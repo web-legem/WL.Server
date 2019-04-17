@@ -18,12 +18,8 @@ namespace WL.Domain {
     [MaxLength(20)]
     public string Number { get; set; }
 
+    public long PublicationYear { get; set; }
+
     public DateTime PublicationDate { get; set; }
-
-    [Required]
-    public string Issue { get; set; }
-
-    [Required]
-    public string FileName { get; set; }
   }
 }
