@@ -26,9 +26,9 @@ namespace WL.Persistance.DocumentTypes {
       return documentType;
     }
 
-    public DocumentType Update(DocumentType updatedDocumetType) {
-      var original = Get(updatedDocumetType.DocumentTypeId);
-      original.Name = updatedDocumetType.Name;
+    public DocumentType Update(DocumentType updated) {
+      var original = Get(updated.DocumentTypeId);
+      original.Name = updated.Name;
       context.SaveChanges();
       return original;
     }

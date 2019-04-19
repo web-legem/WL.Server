@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +26,7 @@ namespace WL.Api {
 
     public IServiceProvider ConfigureServices(IServiceCollection services) {
       services.AddMvc(options => {
-        options.ModelValidatorProviders.Clear();
+        //options.ModelValidatorProviders.Clear();
       });
       services.AddCors();
 
@@ -36,9 +35,9 @@ namespace WL.Api {
         options.UseOracle(connectionString, b => b.MigrationsAssembly("WL.Persistance"));
       });
 
-      services.Configure<ApiBehaviorOptions>(options => {
-        options.SuppressModelStateInvalidFilter = true;
-      });
+      //services.Configure<ApiBehaviorOptions>(options => {
+      //  options.SuppressModelStateInvalidFilter = true;
+      //});
 
       var containerBuilder = new ContainerBuilder();
       containerBuilder.RegisterModule<AutofacModule>();
