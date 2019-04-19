@@ -1,40 +1,37 @@
-﻿//using Microsoft.AspNetCore.Hosting;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using System.Collections.Generic;
-//using System.IO;
-//using WL.Application.Documents.Commands;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.IO;
+using WL.Application.Documents.Commands;
 
-//namespace WL.Api.Controllers {
-//   [Produces("application/json")]
-//   [Route("api/Document")]
-//   public class DocumentController : Controller {
-//      readonly CreateDocumentCommandHandler _createCommandHandler;
-//      readonly IHostingEnvironment _hostingEnvironment;
+namespace WL.Api.Controllers {
 
-//      public DocumentController(
-//         CreateDocumentCommandHandler createCommandHandler,
-//         IHostingEnvironment hostingEnvironment
-//         ) {
-//         _createCommandHandler = createCommandHandler;
-//         _hostingEnvironment = hostingEnvironment;
-//      }
+  [Produces("application/json")]
+  [Route("api/Document")]
+  public class DocumentController : Controller {
+    readonly CreateDocumentCommandHandler _createCommandHandler;
 
-//      [HttpPost]
-//      public IActionResult CreateDocument(
-//         [ModelBinder(BinderType = typeof(JsonModelBinder))] CreateDocumentCmd value,
-//         IList<IFormFile> files) {
-//         Stream stream = null;
+    public DocumentController(
+       CreateDocumentCommandHandler createCommandHandler
+       ) {
+      _createCommandHandler = createCommandHandler;
+    }
 
-//         if(files != null && files.Length() > 0) {
-//            var file = files[0];
-//            stream = file.OpenReadStream();
-//            value.File = stream;
-//         }
+    [HttpPost]
+    public IActionResult CreateDocument(
+       [ModelBinder(BinderType = typeof(JsonModelBinder))] CreateDocumentCommand value,
+       IList<IFormFile> files) {
+      Stream stream = null;
 
-//         return _createCommandHandler.Execute(value, _hostingEnvironment.WebRootPath)
-//            .Match(x => x.Match<IActionResult>(Ok, BadRequest),
-//               ex => StatusCode(500, ex));
-//      }
-//   }
-//}
+      if (files != null && files.Length() > 0) {
+        var file = files[0];
+        stream = file.OpenReadStream();
+        value.File = stream;
+      }
+
+      return _createCommandHandler.Execute(value)
+         .Match(x => x.Match<IActionResult>(Ok, BadRequest),
+            ex => StatusCode(500, ex));
+    }
+  }
+}

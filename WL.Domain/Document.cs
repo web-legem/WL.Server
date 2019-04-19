@@ -9,8 +9,8 @@ namespace WL.Domain {
     public long DocumentTypeId { get; set; }
     public DocumentType DocumentType { get; set; }
 
-    public long EntityTypeId { get; set; }
-    public EntityType EntityType { get; set; }
+    public long EntityId { get; set; }
+    public Entity Entity { get; set; }
 
     [Required]
     [MaxLength(20)]

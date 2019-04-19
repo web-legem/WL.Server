@@ -60,11 +60,14 @@ namespace WL.Api {
     }
 
     void ConfigureAppDirectories() {
-      // TODO - get the directories from appsettings.json
-      var root = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-      var documentDir = Path.Combine(root, "documents");
-      var photoDir = Path.Combine(root, "users", "photos");
-      var thumbnailDir = Path.Combine(root, "users", "thumbnails");
+      var baseDirectory = Configuration["BaseDirectory"];
+      if (!Directory.Exists(baseDirectory)) {
+        Directory.CreateDirectory(baseDirectory);
+      }
+      var documentDir = Path.Combine(baseDirectory, "documents");
+      var photoDir = Path.Combine(baseDirectory, "users", "photos");
+      var thumbnailDir = Path.Combine(baseDirectory, "users", "thumbnails");
+      var textDir = Path.Combine(baseDirectory, "text");
 
       if (!Directory.Exists(documentDir)) {
         Directory.CreateDirectory(documentDir);
@@ -74,6 +77,9 @@ namespace WL.Api {
       }
       if (!Directory.Exists(thumbnailDir)) {
         Directory.CreateDirectory(thumbnailDir);
+      }
+      if (!Directory.Exists(textDir)) {
+        Directory.CreateDirectory(textDir);
       }
     }
   }

@@ -10,7 +10,7 @@ namespace WL.Persistance.Documents {
     public void Configure(EntityTypeBuilder<Document> document) {
       document.HasAlternateKey(d => new {
         d.DocumentTypeId,
-        d.EntityTypeId,
+        d.EntityId,
         d.Number,
         d.PublicationYear
       });
@@ -19,7 +19,7 @@ namespace WL.Persistance.Documents {
         .WithMany()
         .OnDelete(DeleteBehavior.Restrict);
 
-      document.HasOne(d => d.EntityType)
+      document.HasOne(d => d.Entity)
         .WithMany()
         .OnDelete(DeleteBehavior.Restrict);
     }

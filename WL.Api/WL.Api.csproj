@@ -20,4 +20,10 @@
     <ProjectReference Include="..\WL.Persistance\WL.Persistance.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="gsdll64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
