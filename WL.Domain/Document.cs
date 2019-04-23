@@ -19,5 +19,8 @@ namespace WL.Domain {
     public long PublicationYear { get; set; }
 
     public DateTime PublicationDate { get; set; }
+
+    public long FileDocumentId { get; set; }
+    public File File { get; set; }
   }
 }

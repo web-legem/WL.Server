@@ -12,7 +12,7 @@ namespace WL.Persistance.Documents.Files {
       file.HasKey(f => f.DocumentId);
 
       file.HasOne(f => f.Document)
-        .WithOne()
+        .WithOne(d => d.File)
         .OnDelete(DeleteBehavior.Cascade);
     }
   }

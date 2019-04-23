@@ -1,4 +1,5 @@
 ﻿using LanguageExt;
+
 using NSOCRLib;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,7 @@ namespace WL.Application.Documents.Ocr {
 
          NsOCR.Engine_Uninitialize();
 
+         //var txt = "";
          return txt;
        };
   }

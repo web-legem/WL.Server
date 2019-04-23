@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using System;
 using WL.Domain;
 using WL.Persistance.AnnotationTypes;
 using WL.Persistance.Documents;
@@ -17,6 +17,8 @@ namespace WL.Persistance {
     public DbSet<Entity> Entities { get; set; }
     public DbSet<Document> Documents { get; set; }
     public DbSet<File> Files { get; set; }
+
+    public DbQuery<AuxCount> Counts { get; set; }
 
     public WLDbContext(DbContextOptions<WLDbContext> options)
       : base(options) { }

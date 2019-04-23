@@ -33,5 +33,19 @@ namespace WL.Application.Documents {
 
       return document;
     }
+
+    public static DocumentFileDto ToDocumentFileDto(this Document document) {
+      return new DocumentFileDto {
+        Id = document.DocumentId,
+        DocumentTypeId = document.DocumentTypeId,
+        EntityId = document.EntityId,
+        Number = document.Number,
+        PublicationYear = document.PublicationYear,
+        PublicationDate = document.PublicationDate,
+        FileId = document.File.DocumentId,
+        Issue = document.File.Issue,
+        FileName = document.File.Name
+      };
+    }
   }
 }

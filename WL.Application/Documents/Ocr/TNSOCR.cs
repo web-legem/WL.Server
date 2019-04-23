@@ -7,7 +7,7 @@ namespace WL.Application.Documents.Ocr {
 
   public static class TNSOCR {
 
-    //// Error codes
+    // Error codes
     public const int ERROR_FIRST = 0x70000000;
 
     public const int ERROR_FILENOTFOUND = 0x70000001;

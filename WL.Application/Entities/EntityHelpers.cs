@@ -10,7 +10,7 @@ namespace WL.Application.Entities {
         Id = entity.EntityId,
         Name = entity.Name,
         Email = entity.Email,
-        EntityType = entity.EntityType.EntityTypeId,
+        EntityType = entity.EntityTypeId,
       };
     }
 
