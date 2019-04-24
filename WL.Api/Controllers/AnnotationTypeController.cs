@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using WL.Api.Infrastructure;
 using WL.Application.AnnotationTypes.Commands;
 using WL.Application.AnnotationTypes.Queries;
+using static WL.Api.Infrastructure.PermissionsAttribute;
 
 namespace WL.Api.Controllers {
 
   [Produces("application/json")]
   [Route("api/AnnotationType")]
+  [Permissions(MapPerm.ConfigSystem)]
   public class AnnotationTypeController : Controller {
     readonly CreateAnnotationTypeCommandHandler createCommand;
     readonly GetAllAnnotationTypesQuery getAllQuery;

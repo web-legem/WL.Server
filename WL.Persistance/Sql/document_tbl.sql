@@ -1,0 +1,1 @@
+﻿create or replace TYPE document_tbl as table of document_typ;

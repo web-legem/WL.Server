@@ -10,7 +10,7 @@ using WL.Persistance;
 namespace WL.Persistance.Migrations
 {
     [DbContext(typeof(WLDbContext))]
-    [Migration("20190419223331_Initial")]
+    [Migration("20190424140414_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,102 @@ namespace WL.Persistance.Migrations
                     b.ToTable("Files");
                 });
 
+            modelBuilder.Entity("WL.Domain.User.Credential", b =>
+                {
+                    b.Property<long>("UserId");
+
+                    b.Property<DateTime>("Creation");
+
+                    b.Property<string>("Token")
+                        .IsRequired();
+
+                    b.HasKey("UserId");
+
+                    b.HasAlternateKey("Token");
+
+                    b.ToTable("Credentials");
+                });
+
+            modelBuilder.Entity("WL.Domain.User.Restore", b =>
+                {
+                    b.Property<long>("UserId");
+
+                    b.Property<string>("Token");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Restores");
+                });
+
+            modelBuilder.Entity("WL.Domain.User.Role", b =>
+                {
+                    b.Property<long>("RoleId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ConfigSystem");
+
+                    b.Property<int>("CreateDocuments");
+
+                    b.Property<int>("DeleteDocuments");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("RoleId");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("WL.Domain.User.User", b =>
+                {
+                    b.Property<long>("UserId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("IDDocument")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.Property<int>("RoleId");
+
+                    b.Property<long?>("RoleId1");
+
+                    b.Property<string>("State")
+                        .IsRequired();
+
+                    b.HasKey("UserId");
+
+                    b.HasAlternateKey("Email");
+
+                    b.HasAlternateKey("IDDocument");
+
+                    b.HasAlternateKey("Nickname");
+
+                    b.HasIndex("RoleId1");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("WL.Domain.Document", b =>
                 {
                     b.HasOne("WL.Domain.DocumentType", "DocumentType")
@@ -195,6 +291,29 @@ namespace WL.Persistance.Migrations
                         .WithMany("SupportedDocuments")
                         .HasForeignKey("EntityTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WL.Domain.User.Credential", b =>
+                {
+                    b.HasOne("WL.Domain.User.User", "User")
+                        .WithOne("Credential")
+                        .HasForeignKey("WL.Domain.User.Credential", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WL.Domain.User.Restore", b =>
+                {
+                    b.HasOne("WL.Domain.User.User", "User")
+                        .WithOne()
+                        .HasForeignKey("WL.Domain.User.Restore", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WL.Domain.User.User", b =>
+                {
+                    b.HasOne("WL.Domain.User.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId1");
                 });
 #pragma warning restore 612, 618
         }

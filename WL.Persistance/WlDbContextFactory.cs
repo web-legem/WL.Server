@@ -15,7 +15,7 @@ namespace WL.Persistance {
 
       // Build config
       var config = new ConfigurationBuilder()
-          .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Wl.Migrations"))
+          .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../WL.Api"))
           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
           .AddJsonFile($"appsettings.{environment}.json", optional: true)
           .AddEnvironmentVariables()

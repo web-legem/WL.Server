@@ -8,6 +8,7 @@ using WL.Application.Interfaces.Persistance;
 
 using static WL.Application.Common.CommonValidations;
 using static WL.Application.Documents.DocumentValidations;
+using static WL.Application.Helpers.DirectoryHelpers;
 
 namespace WL.Application.Documents.Commands {
 
@@ -49,11 +50,11 @@ namespace WL.Application.Documents.Commands {
     }
 
     void SaveTextFile(FileInfo fileInfo, string text) {
-      File.WriteAllText(Path.Combine(GetBaseDirectoryPath(), "text", fileInfo.Name + ".txt"), text);
+      File.WriteAllText(Path.Combine(GetTextDirectory(), fileInfo.Name + ".txt"), text);
     }
 
     Try<FileInfo> SaveFile(Stream stream) {
-      var fileInfo = new FileInfo(Path.Combine(GetBaseDirectoryPath(), "documents", Path.GetRandomFileName() + ".pdf"));
+      var fileInfo = new FileInfo(Path.Combine(GetDocumentsDirectory(), Path.GetRandomFileName() + ".pdf"));
 
       if (fileInfo.Exists)
         fileInfo.Delete();
@@ -62,21 +63,6 @@ namespace WL.Application.Documents.Commands {
         stream.CopyTo(output);
 
       return () => fileInfo;
-    }
-
-    string GetBaseDirectoryPath() {
-      // Get environment
-      var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-      // Build config
-      var config = new ConfigurationBuilder()
-          .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../WL.Api"))
-          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-          .AddJsonFile($"appsettings.{environment}.json", optional: true)
-          .AddEnvironmentVariables()
-          .Build();
-
-      return config["BaseDirectory"];
     }
   }
 }

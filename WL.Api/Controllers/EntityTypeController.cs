@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using WL.Api.Infrastructure;
 using WL.Application.EntityTypes.Commands;
 using WL.Application.EntityTypes.Queries;
+using static WL.Api.Infrastructure.PermissionsAttribute;
 
 namespace WL.Api.Controllers {
 
   [Produces("application/json")]
   [Route("api/EntityType")]
+  [Permissions(MapPerm.ConfigSystem)]
   public class EntityTypeController : Controller {
     readonly CreateEntityTypeCommandHandler createCommand;
     readonly GetAllEntityTypesQuery getAllQuery;

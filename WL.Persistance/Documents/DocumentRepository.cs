@@ -132,7 +132,8 @@ namespace WL.Persistance.Documents {
 
       using (var connection = context.Database.GetDbConnection() as OracleConnection) {
         connection.Open();
-        using (var command = new OracleCommand("WEBL.SEARCH_COUNT", connection)) {
+        // TODO - probar si es posible retirar el namespace WEBL de la siguiente instrucción
+        using (var command = new OracleCommand("SEARCH_COUNT", connection)) {
           command.CommandType = System.Data.CommandType.StoredProcedure;
           command.BindByName = true;
           command.Parameters.Add(res);

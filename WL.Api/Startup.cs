@@ -13,6 +13,8 @@ using System.IO;
 using WL.Api.Infrastructure;
 using WL.Persistance;
 
+using static WL.Application.Helpers.DirectoryHelpers;
+
 namespace WL.Api {
 
   public class Startup {
@@ -27,6 +29,7 @@ namespace WL.Api {
     public IServiceProvider ConfigureServices(IServiceCollection services) {
       services.AddMvc(options => {
         //options.ModelValidatorProviders.Clear();
+        options.Filters.Add(typeof(AuthFilter));
       });
       services.AddCors();
 
@@ -60,27 +63,27 @@ namespace WL.Api {
     }
 
     void ConfigureAppDirectories() {
-      var baseDirectory = Configuration["BaseDirectory"];
-      if (!Directory.Exists(baseDirectory)) {
-        Directory.CreateDirectory(baseDirectory);
-      }
-      var documentDir = Path.Combine(baseDirectory, "documents");
-      var photoDir = Path.Combine(baseDirectory, "users", "photos");
-      var thumbnailDir = Path.Combine(baseDirectory, "users", "thumbnails");
-      var textDir = Path.Combine(baseDirectory, "text");
+      var baseDirectory = GetBaseDirectory();
 
-      if (!Directory.Exists(documentDir)) {
+      if (!Directory.Exists(baseDirectory))
+        Directory.CreateDirectory(baseDirectory);
+
+      var documentDir = GetDocumentsDirectory();
+      var photoDir = GetPhotosDirectory();
+      var thumbnailDir = GetThumbnailsDirectory();
+      var textDir = GetTextDirectory();
+
+      if (!Directory.Exists(documentDir))
         Directory.CreateDirectory(documentDir);
-      }
-      if (!Directory.Exists(photoDir)) {
+
+      if (!Directory.Exists(photoDir))
         Directory.CreateDirectory(photoDir);
-      }
-      if (!Directory.Exists(thumbnailDir)) {
+
+      if (!Directory.Exists(thumbnailDir))
         Directory.CreateDirectory(thumbnailDir);
-      }
-      if (!Directory.Exists(textDir)) {
+
+      if (!Directory.Exists(textDir))
         Directory.CreateDirectory(textDir);
-      }
     }
   }
 }

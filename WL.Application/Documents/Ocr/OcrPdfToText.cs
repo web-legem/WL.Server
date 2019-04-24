@@ -2,9 +2,7 @@
 
 using NSOCRLib;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using WL.Application.Interfaces;
 
 namespace WL.Application.Documents.Ocr {

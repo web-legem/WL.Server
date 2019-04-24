@@ -59,6 +59,21 @@ namespace WL.Persistance.Migrations {
           });
 
       migrationBuilder.CreateTable(
+          name: "Roles",
+          columns: table => new {
+            RoleId = table.Column<long>(nullable: false)
+                  .Annotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
+            ConfigSystem = table.Column<int>(nullable: false),
+            CreateDocuments = table.Column<int>(nullable: false),
+            DeleteDocuments = table.Column<int>(nullable: false)
+          },
+          constraints: table => {
+            table.PrimaryKey("PK_Roles", x => x.RoleId);
+            table.UniqueConstraint("AK_Roles_Name", x => x.Name);
+          });
+
+      migrationBuilder.CreateTable(
           name: "Entities",
           columns: table => new {
             EntityId = table.Column<long>(nullable: false)
@@ -101,6 +116,34 @@ namespace WL.Persistance.Migrations {
           });
 
       migrationBuilder.CreateTable(
+          name: "Users",
+          columns: table => new {
+            UserId = table.Column<long>(nullable: false)
+                  .Annotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn),
+            Nickname = table.Column<string>(maxLength: 200, nullable: false),
+            FirstName = table.Column<string>(maxLength: 200, nullable: false),
+            LastName = table.Column<string>(maxLength: 200, nullable: false),
+            IDDocument = table.Column<string>(maxLength: 30, nullable: false),
+            Password = table.Column<string>(nullable: false),
+            Email = table.Column<string>(nullable: false),
+            State = table.Column<string>(nullable: false),
+            RoleId = table.Column<int>(nullable: false),
+            RoleId1 = table.Column<long>(nullable: true)
+          },
+          constraints: table => {
+            table.PrimaryKey("PK_Users", x => x.UserId);
+            table.UniqueConstraint("AK_Users_Email", x => x.Email);
+            table.UniqueConstraint("AK_Users_IDDocument", x => x.IDDocument);
+            table.UniqueConstraint("AK_Users_Nickname", x => x.Nickname);
+            table.ForeignKey(
+                      name: "FK_Users_Roles_RoleId1",
+                      column: x => x.RoleId1,
+                      principalTable: "Roles",
+                      principalColumn: "RoleId",
+                      onDelete: ReferentialAction.Restrict);
+          });
+
+      migrationBuilder.CreateTable(
           name: "Documents",
           columns: table => new {
             DocumentId = table.Column<long>(nullable: false)
@@ -135,6 +178,40 @@ namespace WL.Persistance.Migrations {
                       onDelete: ReferentialAction.Cascade);
           });
 
+      migrationBuilder.CreateTable(
+          name: "Credentials",
+          columns: table => new {
+            UserId = table.Column<long>(nullable: false),
+            Token = table.Column<string>(nullable: false),
+            Creation = table.Column<DateTime>(nullable: false)
+          },
+          constraints: table => {
+            table.PrimaryKey("PK_Credentials", x => x.UserId);
+            table.UniqueConstraint("AK_Credentials_Token", x => x.Token);
+            table.ForeignKey(
+                      name: "FK_Credentials_Users_UserId",
+                      column: x => x.UserId,
+                      principalTable: "Users",
+                      principalColumn: "UserId",
+                      onDelete: ReferentialAction.Cascade);
+          });
+
+      migrationBuilder.CreateTable(
+          name: "Restores",
+          columns: table => new {
+            UserId = table.Column<long>(nullable: false),
+            Token = table.Column<string>(nullable: true)
+          },
+          constraints: table => {
+            table.PrimaryKey("PK_Restores", x => x.UserId);
+            table.ForeignKey(
+                      name: "FK_Restores_Users_UserId",
+                      column: x => x.UserId,
+                      principalTable: "Users",
+                      principalColumn: "UserId",
+                      onDelete: ReferentialAction.Cascade);
+          });
+
       migrationBuilder.CreateIndex(
           name: "IX_Documents_EntityId",
           table: "Documents",
@@ -156,6 +233,11 @@ namespace WL.Persistance.Migrations {
           table: "EntityTypeDocumentType",
           column: "DocumentTypeId");
 
+      migrationBuilder.CreateIndex(
+          name: "IX_Users_RoleId1",
+          table: "Users",
+          column: "RoleId1");
+
       migrationBuilder.UpdateDirectory();
     }
 
@@ -164,10 +246,16 @@ namespace WL.Persistance.Migrations {
           name: "AnnotationTypes");
 
       migrationBuilder.DropTable(
+          name: "Credentials");
+
+      migrationBuilder.DropTable(
           name: "Documents");
 
       migrationBuilder.DropTable(
           name: "EntityTypeDocumentType");
+
+      migrationBuilder.DropTable(
+          name: "Restores");
 
       migrationBuilder.DropTable(
           name: "Entities");
@@ -179,7 +267,13 @@ namespace WL.Persistance.Migrations {
           name: "DocumentTypes");
 
       migrationBuilder.DropTable(
+          name: "Users");
+
+      migrationBuilder.DropTable(
           name: "EntityTypes");
+
+      migrationBuilder.DropTable(
+          name: "Roles");
     }
   }
 }

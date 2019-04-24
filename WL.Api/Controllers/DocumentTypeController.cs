@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using WL.Api.Infrastructure;
 using WL.Application.DocumentTypes.Commands;
 using WL.Application.DocumentTypes.Queries;
+using static WL.Api.Infrastructure.PermissionsAttribute;
 
 namespace WL.Api.Controllers {
 
   [Produces("application/json")]
   [Route("api/DocumentType")]
+  [Permissions(MapPerm.ConfigSystem)]
   public class DocumentTypeController : Controller {
     readonly CreateDocumentTypeCommandHandler createCommand;
     readonly GetAllDocumentTypesQuery getAllQuery;
