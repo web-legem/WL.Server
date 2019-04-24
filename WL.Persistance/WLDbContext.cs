@@ -2,6 +2,7 @@
 using System;
 using WL.Domain;
 using WL.Domain.User;
+using WL.Persistance.Annotations;
 using WL.Persistance.AnnotationTypes;
 using WL.Persistance.Documents;
 using WL.Persistance.Documents.Files;
@@ -24,6 +25,7 @@ namespace WL.Persistance {
     public DbSet<User> Users { get; set; }
     public DbSet<Credential> Credentials { get; set; }
     public DbSet<Restore> Restores { get; set; }
+    public DbSet<Annotation> Annotations { get; set; }
 
     public DbQuery<AuxCount> Counts { get; set; }
 
@@ -41,7 +43,8 @@ namespace WL.Persistance {
       modelBuilder.ApplyConfiguration(new RolesConfig());
       modelBuilder.ApplyConfiguration(new UsersConfig());
       modelBuilder.ApplyConfiguration(new CredentialsConfig());
-      modelBuilder.ApplyConfiguration(new RestoreConfig());
+      modelBuilder.ApplyConfiguration(new RestoresConfig());
+      modelBuilder.ApplyConfiguration(new AnnotationsConfig());
     }
   }
 }

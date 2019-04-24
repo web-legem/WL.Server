@@ -7,7 +7,7 @@ using WL.Domain.User;
 
 namespace WL.Persistance.Users {
 
-  public class RestoreConfig : IEntityTypeConfiguration<Restore> {
+  public class RestoresConfig : IEntityTypeConfiguration<Restore> {
 
     public void Configure(EntityTypeBuilder<Restore> restore) {
       restore.HasKey(r => r.UserId);

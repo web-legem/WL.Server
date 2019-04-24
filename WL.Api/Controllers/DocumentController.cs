@@ -13,15 +13,18 @@ namespace WL.Api.Controllers {
     readonly CreateDocumentCommandHandler _createCommandHandler;
     readonly SearchDocumentsQuery searchDocumentsQuery;
     readonly SearchCountQuery searchCountQuery;
+    readonly DownloadFileQuery downloadFileQuery;
 
     public DocumentController(
       CreateDocumentCommandHandler createCommandHandler,
       SearchDocumentsQuery searchDocumentsQuery,
-      SearchCountQuery searchCountQuery
-      ) {
+      SearchCountQuery searchCountQuery,
+      DownloadFileQuery downloadFileQuery
+    ) {
       _createCommandHandler = createCommandHandler;
       this.searchDocumentsQuery = searchDocumentsQuery;
       this.searchCountQuery = searchCountQuery;
+      this.downloadFileQuery = downloadFileQuery;
     }
 
     [HttpPost]
@@ -86,6 +89,15 @@ namespace WL.Api.Controllers {
           x =>
             Ok(x),
           ex => StatusCode(500, ex));
+    }
+
+    [HttpGet("download/{id}")]
+    public IActionResult DownloadFile(long id) {
+      return downloadFileQuery
+            .Execute(id)
+            .Match(
+               x => (IActionResult)File(x, "application/pdf"),
+               ex => StatusCode(500, ex));
     }
   }
 }
