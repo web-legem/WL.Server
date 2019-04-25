@@ -1,4 +1,4 @@
-CREATE USER webl IDENTIFIED BY webl;
+CREATE USER webl IDENTIFIED BY 1234;
 
 CREATE TABLESPACE tb_webl
     DATAFILE 'C:/oracle/oradata/tests/dat_webl.dbf'
