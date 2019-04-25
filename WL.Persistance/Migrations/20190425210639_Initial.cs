@@ -102,13 +102,13 @@ namespace WL.Persistance.Migrations {
           constraints: table => {
             table.PrimaryKey("PK_EntityTypeDocumentType", x => new { x.EntityTypeId, x.DocumentTypeId });
             table.ForeignKey(
-                      name: "FK_EntityTypeDocumentType_DocumentTypes_DocumentTypeId",
+                      name: "FK_ETDT_DT",
                       column: x => x.DocumentTypeId,
                       principalTable: "DocumentTypes",
                       principalColumn: "DocumentTypeId",
                       onDelete: ReferentialAction.Restrict);
             table.ForeignKey(
-                      name: "FK_EntityTypeDocumentType_EntityTypes_EntityTypeId",
+                      name: "FK_ETDT_ET",
                       column: x => x.EntityTypeId,
                       principalTable: "EntityTypes",
                       principalColumn: "EntityTypeId",
@@ -212,6 +212,49 @@ namespace WL.Persistance.Migrations {
                       onDelete: ReferentialAction.Cascade);
           });
 
+      migrationBuilder.CreateTable(
+          name: "Annotations",
+          columns: table => new {
+            AnnotationId = table.Column<long>(nullable: false)
+                  .Annotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn),
+            FromDocumentId = table.Column<long>(nullable: false),
+            ToDocumentId = table.Column<long>(nullable: false),
+            AnnotationTypeId = table.Column<long>(nullable: false),
+            Description = table.Column<string>(nullable: true)
+          },
+          constraints: table => {
+            table.PrimaryKey("PK_Annotations", x => x.AnnotationId);
+            table.UniqueConstraint("AK_Annotations_FromDocumentId_ToDocumentId", x => new { x.FromDocumentId, x.ToDocumentId });
+            table.ForeignKey(
+                      name: "FK_Annotations_AnnotationTypes_AnnotationTypeId",
+                      column: x => x.AnnotationTypeId,
+                      principalTable: "AnnotationTypes",
+                      principalColumn: "AnnotationTypeId",
+                      onDelete: ReferentialAction.Cascade);
+            table.ForeignKey(
+                      name: "FK_Annotations_Documents_FromDocumentId",
+                      column: x => x.FromDocumentId,
+                      principalTable: "Documents",
+                      principalColumn: "DocumentId",
+                      onDelete: ReferentialAction.Restrict);
+            table.ForeignKey(
+                      name: "FK_Annotations_Documents_ToDocumentId",
+                      column: x => x.ToDocumentId,
+                      principalTable: "Documents",
+                      principalColumn: "DocumentId",
+                      onDelete: ReferentialAction.Restrict);
+          });
+
+      migrationBuilder.CreateIndex(
+          name: "IX_Annotations_AnnotationTypeId",
+          table: "Annotations",
+          column: "AnnotationTypeId");
+
+      migrationBuilder.CreateIndex(
+          name: "IX_Annotations_ToDocumentId",
+          table: "Annotations",
+          column: "ToDocumentId");
+
       migrationBuilder.CreateIndex(
           name: "IX_Documents_EntityId",
           table: "Documents",
@@ -243,13 +286,10 @@ namespace WL.Persistance.Migrations {
 
     protected override void Down(MigrationBuilder migrationBuilder) {
       migrationBuilder.DropTable(
-          name: "AnnotationTypes");
+          name: "Annotations");
 
       migrationBuilder.DropTable(
           name: "Credentials");
-
-      migrationBuilder.DropTable(
-          name: "Documents");
 
       migrationBuilder.DropTable(
           name: "EntityTypeDocumentType");
@@ -258,22 +298,28 @@ namespace WL.Persistance.Migrations {
           name: "Restores");
 
       migrationBuilder.DropTable(
+          name: "AnnotationTypes");
+
+      migrationBuilder.DropTable(
+          name: "Documents");
+
+      migrationBuilder.DropTable(
+          name: "Users");
+
+      migrationBuilder.DropTable(
+          name: "DocumentTypes");
+
+      migrationBuilder.DropTable(
           name: "Entities");
 
       migrationBuilder.DropTable(
           name: "Files");
 
       migrationBuilder.DropTable(
-          name: "DocumentTypes");
-
-      migrationBuilder.DropTable(
-          name: "Users");
+          name: "Roles");
 
       migrationBuilder.DropTable(
           name: "EntityTypes");
-
-      migrationBuilder.DropTable(
-          name: "Roles");
     }
   }
 }
