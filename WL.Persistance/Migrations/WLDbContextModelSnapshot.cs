@@ -185,7 +185,7 @@ namespace WL.Persistance.Migrations
                     b.Property<long>("DocumentTypeId");
 
                     b.HasKey("EntityTypeId", "DocumentTypeId")
-                        .HasName("AK_ETDT_UQ");
+                        .HasName("PK_ETDT");
 
                     b.HasIndex("DocumentTypeId")
                         .HasName("IX_ETDT_DTI");
@@ -369,13 +369,13 @@ namespace WL.Persistance.Migrations
                     b.HasOne("WL.Domain.DocumentType", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId")
-                        .HasConstraintName("FK_ETDT_DT")
+                        .HasConstraintName("FK_ETDT_DT_DTI")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WL.Domain.EntityType", "EntityType")
                         .WithMany("SupportedDocuments")
                         .HasForeignKey("EntityTypeId")
-                        .HasConstraintName("FK_ETDT_ET")
+                        .HasConstraintName("FK_ETDT_ET_ETI")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
