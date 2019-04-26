@@ -30,6 +30,8 @@ namespace WL.Api {
       services.AddMvc(options => {
         //options.ModelValidatorProviders.Clear();
         options.Filters.Add(typeof(AuthFilter));
+      }).AddJsonOptions(jsonOpts => {
+        jsonOpts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
       });
       services.AddCors();
 
