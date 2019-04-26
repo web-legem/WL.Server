@@ -1,46 +1,71 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
 
 namespace WL.Persistance.Users {
+   public class CredentialsRepository : ICredentialRepository {
+      readonly WLDbContext context;
 
-  public class CredentialsRepository : ICredentialRepository {
-    readonly WLDbContext context;
-
-    public CredentialsRepository(WLDbContext context) {
-      this.context = context;
-    }
-
-    public Credential Get(long id) {
-      return context.Credentials.Find(id);
-    }
-
-    public IQueryable<Credential> GetAll() {
-      return context.Credentials;
-    }
-
-    public Credential Create(Credential entity) {
-      var original = context.Credentials.FirstOrDefault(c => c.UserId == entity.UserId);
-      if (original != null) {
-        return Update(entity);
+      public CredentialsRepository(WLDbContext context) {
+         this.context = context;
       }
-      context.Credentials.Add(entity);
-      context.SaveChanges();
-      return entity;
-    }
 
-    public Credential Update(Credential entity) {
-      var original = context.Credentials.Find(entity.UserId);
-      original.Token = entity.Token;
-      original.Creation = entity.Creation;
-      context.SaveChanges();
-      return original;
-    }
+      public Credential Get(long id) {
+         try {
+            return context.Credentials.Find(id);
+         }
+         catch (Exception e) {
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+         }
+      }
 
-    public void Delete(long id) {
-      var original = context.Credentials.Find(id);
-      context.Credentials.Remove(original);
-      context.SaveChanges();
-    }
-  }
+      public IQueryable<Credential> GetAll() {
+         try {
+            return context.Credentials;
+         }
+         catch (Exception e) {
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+         }
+      }
+
+      public Credential Create(Credential entity) {
+         try {
+            var original = context.Credentials.FirstOrDefault(c => c.UserId == entity.UserId);
+            if (original != null) {
+               return Update(entity);
+            }
+            context.Credentials.Add(entity);
+            context.SaveChanges();
+            return entity;
+         }
+         catch (Exception e) {
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+         }
+      }
+
+      public Credential Update(Credential entity) {
+         try {
+            var original = context.Credentials.Find(entity.UserId);
+            original.Token = entity.Token;
+            original.Creation = entity.Creation;
+            context.SaveChanges();
+            return original;
+         }
+         catch (Exception e) {
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+         }
+      }
+
+      public void Delete(long id) {
+         try {
+            var original = context.Credentials.Find(id);
+            context.Credentials.Remove(original);
+            context.SaveChanges();
+         }
+         catch (Exception e) {
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+         }
+      }
+   }
 }
