@@ -102,7 +102,7 @@ namespace WL.Persistance.Migrations {
           constraints: table => {
             table.PrimaryKey("PK_EntityTypeDocumentType", x => new { x.EntityTypeId, x.DocumentTypeId });
             table.ForeignKey(
-                      name: "FK_EntityTypeDocumentType_DocumentTypes_DocumentTypeId",
+                      name: "FK_TDT_DocumentTypeId",
                       column: x => x.DocumentTypeId,
                       principalTable: "DocumentTypes",
                       principalColumn: "DocumentTypeId",
