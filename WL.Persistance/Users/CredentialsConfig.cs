@@ -13,7 +13,7 @@ namespace WL.Persistance.Users {
         .WithOne(u => u.Credential)
         .OnDelete(DeleteBehavior.Cascade);
 
-      credential.HasAlternateKey(c => c.Token);
+      credential.HasIndex(c => c.Token).IsUnique();
     }
   }
 }

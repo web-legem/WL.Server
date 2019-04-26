@@ -62,7 +62,9 @@ namespace WL.Api.Controllers {
     public IActionResult Logout(long id) {
       return sessionQuery.Execute(id).Match(
          _ => Ok() as IActionResult,
-         err => StatusCode(500, err));
+         err =>
+         StatusCode(500, err)
+         );
     }
 
     [HttpGet]

@@ -38,17 +38,6 @@ namespace WL.Persistance.MigrationHelpers {
 
       var searchCountFunc = LoadStringFromFile("search_count.sql");
       migrationBuilder.Sql(searchCountFunc);
-
-      migrationBuilder.InsertData(
-        table: "Roles",
-        columns: new[] { "Name", "ConfigSystem", "CreateDocuments", "DeleteDocuments" },
-        values: new object[] { "Super Admin", 1, 1, 1 }
-        );
-
-      migrationBuilder.InsertData(
-        table: "Users",
-        columns: new[] { "Nickname", "FirstName", "LastName", "IDDocument", "Password", "Email", "State", "RoleId" },
-        values: new object[] { "admin", "admin", "admin", "123456789", "202cb962ac59075b964b07152d234b70", "andres_solarte@hotmail.com", "active", 1 });
     }
   }
 }

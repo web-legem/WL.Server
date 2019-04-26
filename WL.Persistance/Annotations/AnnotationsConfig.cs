@@ -18,7 +18,8 @@ namespace WL.Persistance.Annotations {
         .WithMany()
         .OnDelete(DeleteBehavior.Restrict);
 
-      annotation.HasAlternateKey(a => new { a.FromDocumentId, a.ToDocumentId });
+      annotation.HasIndex(a => new { a.FromDocumentId, a.ToDocumentId })
+        .IsUnique();
     }
   }
 }

@@ -8,12 +8,12 @@ namespace WL.Persistance.Documents {
   internal class DocumentConfig : IEntityTypeConfiguration<Document> {
 
     public void Configure(EntityTypeBuilder<Document> document) {
-      document.HasAlternateKey(d => new {
+      document.HasIndex(d => new {
         d.DocumentTypeId,
         d.EntityId,
         d.Number,
         d.PublicationYear
-      });
+      }).IsUnique();
 
       document.HasOne(d => d.DocumentType)
         .WithMany()

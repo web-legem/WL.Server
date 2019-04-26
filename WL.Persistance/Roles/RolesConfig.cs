@@ -10,7 +10,14 @@ namespace WL.Persistance.Roles {
   internal class RolesConfig : IEntityTypeConfiguration<Role> {
 
     public void Configure(EntityTypeBuilder<Role> role) {
-      role.HasAlternateKey(r => r.Name);
+      role.HasIndex(r => r.Name).IsUnique();
+      SeedData(role);
+    }
+
+    private void SeedData(EntityTypeBuilder<Role> roles) {
+      roles.HasData(
+          new { Id = 1L, Name = "Super Admin", ConfigSystem = 1, CreateDocuments = 1, DeleteDocuments = 1 }
+        );
     }
   }
 }

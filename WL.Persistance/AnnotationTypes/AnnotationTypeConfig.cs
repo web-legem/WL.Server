@@ -8,8 +8,8 @@ namespace WL.Persistance.AnnotationTypes {
   internal class AnnotationTypeConfig : IEntityTypeConfiguration<AnnotationType> {
 
     public void Configure(EntityTypeBuilder<AnnotationType> builder) {
-      builder.HasAlternateKey(at => at.Name);
-      builder.HasAlternateKey(at => at.Root);
+      builder.HasIndex(at => at.Name).IsUnique();
+      builder.HasIndex(at => at.Root).IsUnique();
 
       SeedData(builder);
     }

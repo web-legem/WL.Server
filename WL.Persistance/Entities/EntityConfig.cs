@@ -8,7 +8,7 @@ namespace WL.Persistance.Entities {
   internal class EntityConfig : IEntityTypeConfiguration<Entity> {
 
     public void Configure(EntityTypeBuilder<Entity> entity) {
-      entity.HasAlternateKey(e => e.Name);
+      entity.HasIndex(e => e.Name).IsUnique();
       SeedData(entity);
     }
 

@@ -9,8 +9,8 @@ namespace WL.Persistance.DocumentTypes {
 
     public void Configure(EntityTypeBuilder<DocumentType> documentType) {
       documentType.HasIndex(dt => dt.Name)
-        .IsUnique()
-        .HasName("UQ_DT_Name"); // Indice unico, diferente de AlternateKey
+        .IsUnique();
+      //.HasName("UQ_DT_Name"); // Indice unico, diferente de AlternateKey
 
       AddSeedData(documentType);
     }
