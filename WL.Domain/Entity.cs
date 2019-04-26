@@ -3,7 +3,7 @@
 namespace WL.Domain {
 
   public class Entity {
-    public long EntityId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     [MaxLength(255)]

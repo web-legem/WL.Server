@@ -7,9 +7,9 @@ using WL.Domain.User;
 
 namespace WL.Persistance.Users {
 
-  public class RestoresConfig : IEntityTypeConfiguration<Restore> {
+  public class RestoresConfig : IEntityTypeConfiguration<RestoreCredential> {
 
-    public void Configure(EntityTypeBuilder<Restore> restore) {
+    public void Configure(EntityTypeBuilder<RestoreCredential> restore) {
       restore.HasKey(r => r.UserId);
 
       restore.HasOne(r => r.User)

@@ -154,7 +154,7 @@ namespace WL.Persistance.Documents {
     public Document Get(long id) {
       return context.Documents
         .Include(d => d.File)
-        .First(d => d.DocumentId == id);
+        .First(d => d.Id == id);
     }
 
     public IQueryable<Document> GetAll() => throw new NotImplementedException();

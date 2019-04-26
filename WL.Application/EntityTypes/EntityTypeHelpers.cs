@@ -9,7 +9,7 @@ namespace WL.Application.EntityTypes {
 
     public static EntityTypeDto ToTipoEntidadDTO(this EntityType entityType)
       => new EntityTypeDto {
-        Id = entityType.EntityTypeId,
+        Id = entityType.Id,
         Name = entityType.Name,
         SupportedDocumentTypesIds = entityType
           .SupportedDocuments
@@ -27,7 +27,7 @@ namespace WL.Application.EntityTypes {
 
     public static EntityType CreateEntityTypeFrom(UpdateEntityTypeCommand cmd)
       => new EntityType {
-        EntityTypeId = cmd.Id,
+        Id = cmd.Id,
         Name = cmd.Name,
         SupportedDocuments = cmd.SupportedDocumentTypesIds
           .Select(id => new EntityTypeDocumentType {

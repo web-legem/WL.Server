@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WL.Domain.User {
 
   public class Role {
-    public long RoleId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     [MaxLength(200)]

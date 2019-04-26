@@ -7,7 +7,7 @@ namespace WL.Application.DocumentTypes {
 
     public static DocumentTypeDto ToDocumentTypeDto(this DocumentType documentType)
       => new DocumentTypeDto {
-        Id = documentType.DocumentTypeId,
+        Id = documentType.Id,
         Name = documentType.Name
       };
 
@@ -19,7 +19,7 @@ namespace WL.Application.DocumentTypes {
 
     public static DocumentType CreateDocumentTypeFrom(UpdateDocumentTypeCommand cmd) {
       return new DocumentType {
-        DocumentTypeId = cmd.Id,
+        Id = cmd.Id,
         Name = cmd.Name
       };
     }

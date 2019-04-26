@@ -21,7 +21,7 @@ namespace WL.Persistance.Roles {
         .Include(c => c.User)
         .First(c => c.Token == token);
 
-      var role = context.Roles.First(r => credential.User.RoleId == r.RoleId);
+      var role = context.Roles.First(r => credential.User.RoleId == r.Id);
       return role;
     }
 
@@ -40,7 +40,7 @@ namespace WL.Persistance.Roles {
     }
 
     public Role Update(Role entity) {
-      var original = context.Roles.Find(entity.RoleId);
+      var original = context.Roles.Find(entity.Id);
       original.CreateDocuments = entity.CreateDocuments;
       original.DeleteDocuments = entity.DeleteDocuments;
       original.ConfigSystem = entity.ConfigSystem;

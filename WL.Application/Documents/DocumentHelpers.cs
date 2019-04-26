@@ -19,7 +19,7 @@ namespace WL.Application.Documents {
     }
 
     public static DocumentDto ToDocumentDto(this Document document) => new DocumentDto {
-      Id = document.DocumentId,
+      Id = document.Id,
       EntityId = document.EntityId,
       DocumentTypeId = document.DocumentTypeId,
       Number = document.Number,
@@ -36,7 +36,7 @@ namespace WL.Application.Documents {
 
     public static DocumentFileDto ToDocumentFileDto(this Document document) {
       return new DocumentFileDto {
-        Id = document.DocumentId,
+        Id = document.Id,
         DocumentTypeId = document.DocumentTypeId,
         EntityId = document.EntityId,
         Number = document.Number,

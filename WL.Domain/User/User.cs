@@ -3,7 +3,7 @@
 namespace WL.Domain.User {
 
   public class User {
-    public long UserId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     [MaxLength(200)]
@@ -30,7 +30,7 @@ namespace WL.Domain.User {
     [Required]
     public string State { get; set; }
 
-    public int RoleId { get; set; }
+    public long RoleId { get; set; }
     public Role Role { get; set; }
 
     public Credential Credential { get; set; }

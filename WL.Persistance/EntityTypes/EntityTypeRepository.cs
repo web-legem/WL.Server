@@ -19,7 +19,7 @@ namespace WL.Persistance.EntityTypes {
         .AsNoTracking()
         .Include(et => et.SupportedDocuments)
         .ThenInclude(sd => sd.DocumentType)
-        .First(et => et.EntityTypeId == id);
+        .First(et => et.Id == id);
     }
 
     public IQueryable<EntityType> GetAll() {
@@ -40,7 +40,7 @@ namespace WL.Persistance.EntityTypes {
     public EntityType Update(EntityType entity) {
       var original = context.EntityTypes
         .Include(et => et.SupportedDocuments)
-        .First(et => et.EntityTypeId == entity.EntityTypeId);
+        .First(et => et.Id == entity.Id);
 
       original.Name = entity.Name;
       original.SupportedDocuments = entity.SupportedDocuments;

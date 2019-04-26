@@ -3,7 +3,7 @@
 namespace WL.Domain {
 
   public class DocumentType {
-    public long DocumentTypeId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     [MaxLength(255)]

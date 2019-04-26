@@ -27,7 +27,7 @@ namespace WL.Persistance.Entities {
     }
 
     public Entity Update(Entity entity) {
-      var original = context.Entities.Find(entity.EntityId);
+      var original = context.Entities.Find(entity.Id);
       original.Name = entity.Name;
       original.Email = entity.Email;
       original.EntityTypeId = entity.EntityTypeId;

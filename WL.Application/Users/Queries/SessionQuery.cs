@@ -54,16 +54,16 @@ namespace WL.Application.Users.Queries {
       }
       var documentMd5 = sb.ToString();
 
-      credential.id = user.UserId;
+      credential.id = user.Id;
       if (user.Password.Equals(password)) {
         if (!documentMd5.Equals(password)) {
           credential.firstName = user.FirstName;
           credential.newPasswordRequired = false;
-          credential.token = GetUniqueToken(user.UserId);
+          credential.token = GetUniqueToken(user.Id);
           credential.permission = "1";
           string hostName = Dns.GetHostName();
           var myIP = Dns.GetHostEntry(hostName).AddressList[0].ToString();
-          credential.photo = address + "/api/User/Photo?id=" + user.UserId + "&mode=min";
+          credential.photo = address + "/api/User/Photo?id=" + user.Id + "&mode=min";
           Console.WriteLine(credential.photo);
           Credential cre = new Credential {
             UserId = credential.id,

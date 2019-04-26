@@ -6,7 +6,7 @@ using System.Text;
 namespace WL.Domain {
 
   public class Annotation {
-    public long AnnotationId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     public long FromDocumentId { get; set; }

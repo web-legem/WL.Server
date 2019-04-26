@@ -7,7 +7,7 @@ namespace WL.Application.AnnotationTypes {
 
     public static AnnotationTypeDto ToAnnotationTypeDto(this AnnotationType annotationType)
       => new AnnotationTypeDto {
-        Id = annotationType.AnnotationTypeId,
+        Id = annotationType.Id,
         Name = annotationType.Name,
         Root = annotationType.Root
       };
@@ -20,7 +20,7 @@ namespace WL.Application.AnnotationTypes {
 
     public static AnnotationType ToAnnotationType(this UpdateAnnotationTypeCommand cmd)
       => new AnnotationType {
-        AnnotationTypeId = cmd.Id,
+        Id = cmd.Id,
         Name = cmd.Name,
         Root = cmd.Root
       };

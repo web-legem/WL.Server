@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WL.Domain {
 
   public class EntityType {
-    public long EntityTypeId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     [MaxLength(255)]

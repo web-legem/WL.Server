@@ -30,7 +30,7 @@ namespace WL.Application.Users.Commands {
 
     bool SavePhoto(Stream stream, bool fileWasChange, User user) {
       if (stream != null && fileWasChange) {
-        UserHelpers.SaveFile(user.UserId + ".png", stream);
+        UserHelpers.SaveFile(user.Id + ".png", stream);
         return true;
       }
       return false;

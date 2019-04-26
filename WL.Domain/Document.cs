@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WL.Domain {
 
   public class Document {
-    public long DocumentId { get; set; }
+    public long Id { get; set; }
 
     public long DocumentTypeId { get; set; }
     public DocumentType DocumentType { get; set; }

@@ -17,16 +17,16 @@ namespace WL.Persistance.Users {
     public long CreateRestoreToken(string email, string token) {
       var user = context.Users.FirstOrDefault(x => x.Email == email);
       if (user != null) {
-        var original = context.Restores.FirstOrDefault(r => r.UserId == user.UserId);
+        var original = context.RestoreCredentials.FirstOrDefault(r => r.UserId == user.Id);
         if (original != null) {
           original.Token = token;
           context.SaveChanges();
         } else {
-          var restore = new Restore { UserId = user.UserId, User = user, Token = token };
-          context.Restores.Add(restore);
+          var restore = new RestoreCredential { UserId = user.Id, User = user, Token = token };
+          context.RestoreCredentials.Add(restore);
           context.SaveChanges();
         }
-        return user.UserId;
+        return user.Id;
       }
 
       // TODO - que pasa si el usuario no existe?
@@ -35,17 +35,17 @@ namespace WL.Persistance.Users {
 
     public bool IsValidToken(long userId, string token) {
       // TODO - que hacer si no lo encuentra, validar
-      var restore = context.Restores.Find(userId);
+      var restore = context.RestoreCredentials.Find(userId);
       return restore.Token == token;
     }
 
-    public Restore Get(long id) => throw new NotImplementedException();
+    public RestoreCredential Get(long id) => throw new NotImplementedException();
 
-    public IQueryable<Restore> GetAll() => throw new NotImplementedException();
+    public IQueryable<RestoreCredential> GetAll() => throw new NotImplementedException();
 
-    public Restore Create(Restore entity) => throw new NotImplementedException();
+    public RestoreCredential Create(RestoreCredential entity) => throw new NotImplementedException();
 
-    public Restore Update(Restore entity) => throw new NotImplementedException();
+    public RestoreCredential Update(RestoreCredential entity) => throw new NotImplementedException();
 
     public void Delete(long id) => throw new NotImplementedException();
   }

@@ -32,7 +32,7 @@ namespace WL.Persistance.Users {
     }
 
     public User Update(User entity) {
-      var original = context.Users.Find(entity.UserId);
+      var original = context.Users.Find(entity.Id);
       original.Nickname = entity.Nickname;
       original.LastName = entity.LastName;
       original.Password = entity.Password;

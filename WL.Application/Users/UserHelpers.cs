@@ -22,7 +22,7 @@ namespace WL.Application.Users {
 
     public static Domain.User.User ToUser(this UpdateUserCmd res)
        => new Domain.User.User {
-         UserId = res.Id,
+         Id = res.Id,
          Nickname = res.Nickname,
          FirstName = res.FirstName,
          LastName = res.LastName,
@@ -35,7 +35,7 @@ namespace WL.Application.Users {
 
     public static UserDto ToUserDTO(this Domain.User.User res)
        => new UserDto {
-         Id = res.UserId,
+         Id = res.Id,
          Nickname = res.Nickname,
          FirstName = res.FirstName,
          LastName = res.LastName,

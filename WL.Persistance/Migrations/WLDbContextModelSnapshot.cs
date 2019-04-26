@@ -21,7 +21,7 @@ namespace WL.Persistance.Migrations
 
             modelBuilder.Entity("WL.Domain.Annotation", b =>
                 {
-                    b.Property<long>("AnnotationId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<long>("AnnotationTypeId");
@@ -30,22 +30,33 @@ namespace WL.Persistance.Migrations
 
                     b.Property<long>("FromDocumentId");
 
+                    b.Property<long?>("FromId");
+
                     b.Property<long>("ToDocumentId");
 
-                    b.HasKey("AnnotationId");
+                    b.Property<long?>("ToId");
 
-                    b.HasAlternateKey("FromDocumentId", "ToDocumentId");
+                    b.HasKey("Id")
+                        .HasName("PK_A");
 
-                    b.HasIndex("AnnotationTypeId");
+                    b.HasAlternateKey("FromDocumentId", "ToDocumentId")
+                        .HasName("AK_A_FDI_TDI");
 
-                    b.HasIndex("ToDocumentId");
+                    b.HasIndex("AnnotationTypeId")
+                        .HasName("IX_A_ATI");
+
+                    b.HasIndex("FromId")
+                        .HasName("IX_A_FI");
+
+                    b.HasIndex("ToId")
+                        .HasName("IX_A_TI");
 
                     b.ToTable("Annotations");
                 });
 
             modelBuilder.Entity("WL.Domain.AnnotationType", b =>
                 {
-                    b.Property<long>("AnnotationTypeId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
@@ -56,18 +67,21 @@ namespace WL.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(10);
 
-                    b.HasKey("AnnotationTypeId");
+                    b.HasKey("Id")
+                        .HasName("PK_AT");
 
-                    b.HasAlternateKey("Name");
+                    b.HasAlternateKey("Name")
+                        .HasName("AK_AT_N");
 
-                    b.HasAlternateKey("Root");
+                    b.HasAlternateKey("Root")
+                        .HasName("AK_AT_R");
 
                     b.ToTable("AnnotationTypes");
                 });
 
             modelBuilder.Entity("WL.Domain.Document", b =>
                 {
-                    b.Property<long>("DocumentId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<long>("DocumentTypeId");
@@ -84,37 +98,44 @@ namespace WL.Persistance.Migrations
 
                     b.Property<long>("PublicationYear");
 
-                    b.HasKey("DocumentId");
+                    b.HasKey("Id")
+                        .HasName("PK_D");
 
-                    b.HasAlternateKey("DocumentTypeId", "EntityId", "Number", "PublicationYear");
+                    b.HasAlternateKey("DocumentTypeId", "EntityId", "Number", "PublicationYear")
+                        .HasName("AK_D_DTI_EI_N_PY");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("EntityId")
+                        .HasName("IX_D_EI");
 
                     b.HasIndex("FileDocumentId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasName("IX_D_FDI");
 
                     b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("WL.Domain.DocumentType", b =>
                 {
-                    b.Property<long>("DocumentTypeId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.HasKey("DocumentTypeId");
+                    b.HasKey("Id")
+                        .HasName("PK_DT");
 
-                    b.HasAlternateKey("Name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasName("UQ_DT_N");
 
                     b.ToTable("DocumentTypes");
                 });
 
             modelBuilder.Entity("WL.Domain.Entity", b =>
                 {
-                    b.Property<long>("EntityId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email")
@@ -127,27 +148,32 @@ namespace WL.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.HasKey("EntityId");
+                    b.HasKey("Id")
+                        .HasName("PK_E");
 
-                    b.HasAlternateKey("Name");
+                    b.HasAlternateKey("Name")
+                        .HasName("AK_E_N");
 
-                    b.HasIndex("EntityTypeId");
+                    b.HasIndex("EntityTypeId")
+                        .HasName("IX_E_ETI");
 
                     b.ToTable("Entities");
                 });
 
             modelBuilder.Entity("WL.Domain.EntityType", b =>
                 {
-                    b.Property<long>("EntityTypeId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.HasKey("EntityTypeId");
+                    b.HasKey("Id")
+                        .HasName("PK_ET");
 
-                    b.HasAlternateKey("Name");
+                    b.HasAlternateKey("Name")
+                        .HasName("AK_ET_N");
 
                     b.ToTable("EntityTypes");
                 });
@@ -158,9 +184,11 @@ namespace WL.Persistance.Migrations
 
                     b.Property<long>("DocumentTypeId");
 
-                    b.HasKey("EntityTypeId", "DocumentTypeId");
+                    b.HasKey("EntityTypeId", "DocumentTypeId")
+                        .HasName("AK_ETDT_UQ");
 
-                    b.HasIndex("DocumentTypeId");
+                    b.HasIndex("DocumentTypeId")
+                        .HasName("IX_ETDT_DTI");
 
                     b.ToTable("EntityTypeDocumentType");
                 });
@@ -175,7 +203,8 @@ namespace WL.Persistance.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.HasKey("DocumentId");
+                    b.HasKey("DocumentId")
+                        .HasName("PK_F");
 
                     b.ToTable("Files");
                 });
@@ -189,27 +218,30 @@ namespace WL.Persistance.Migrations
                     b.Property<string>("Token")
                         .IsRequired();
 
-                    b.HasKey("UserId");
+                    b.HasKey("UserId")
+                        .HasName("PK_C");
 
-                    b.HasAlternateKey("Token");
+                    b.HasAlternateKey("Token")
+                        .HasName("AK_C_T");
 
                     b.ToTable("Credentials");
                 });
 
-            modelBuilder.Entity("WL.Domain.User.Restore", b =>
+            modelBuilder.Entity("WL.Domain.User.RestoreCredential", b =>
                 {
                     b.Property<long>("UserId");
 
                     b.Property<string>("Token");
 
-                    b.HasKey("UserId");
+                    b.HasKey("UserId")
+                        .HasName("PK_RC");
 
-                    b.ToTable("Restores");
+                    b.ToTable("RestoreCredentials");
                 });
 
             modelBuilder.Entity("WL.Domain.User.Role", b =>
                 {
-                    b.Property<long>("RoleId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("ConfigSystem");
@@ -222,16 +254,18 @@ namespace WL.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("RoleId");
+                    b.HasKey("Id")
+                        .HasName("PK_R");
 
-                    b.HasAlternateKey("Name");
+                    b.HasAlternateKey("Name")
+                        .HasName("AK_R_N");
 
                     b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("WL.Domain.User.User", b =>
                 {
-                    b.Property<long>("UserId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email")
@@ -256,22 +290,25 @@ namespace WL.Persistance.Migrations
                     b.Property<string>("Password")
                         .IsRequired();
 
-                    b.Property<int>("RoleId");
-
-                    b.Property<long?>("RoleId1");
+                    b.Property<long>("RoleId");
 
                     b.Property<string>("State")
                         .IsRequired();
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id")
+                        .HasName("PK_U");
 
-                    b.HasAlternateKey("Email");
+                    b.HasAlternateKey("Email")
+                        .HasName("AK_U_E");
 
-                    b.HasAlternateKey("IDDocument");
+                    b.HasAlternateKey("IDDocument")
+                        .HasName("AK_U_IDD");
 
-                    b.HasAlternateKey("Nickname");
+                    b.HasAlternateKey("Nickname")
+                        .HasName("AK_U_N");
 
-                    b.HasIndex("RoleId1");
+                    b.HasIndex("RoleId")
+                        .HasName("IX_U_RI");
 
                     b.ToTable("Users");
                 });
@@ -281,16 +318,19 @@ namespace WL.Persistance.Migrations
                     b.HasOne("WL.Domain.AnnotationType", "AnnotationType")
                         .WithMany()
                         .HasForeignKey("AnnotationTypeId")
+                        .HasConstraintName("FK_A_AT_ATI")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WL.Domain.Document", "From")
                         .WithMany()
-                        .HasForeignKey("FromDocumentId")
+                        .HasForeignKey("FromId")
+                        .HasConstraintName("FK_A_D_FI")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WL.Domain.Document", "To")
                         .WithMany()
-                        .HasForeignKey("ToDocumentId")
+                        .HasForeignKey("ToId")
+                        .HasConstraintName("FK_A_D_TI")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -299,16 +339,19 @@ namespace WL.Persistance.Migrations
                     b.HasOne("WL.Domain.DocumentType", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId")
+                        .HasConstraintName("FK_D_DT_DTI")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WL.Domain.Entity", "Entity")
                         .WithMany()
                         .HasForeignKey("EntityId")
+                        .HasConstraintName("FK_D_E_EI")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WL.Domain.File", "File")
                         .WithOne("Document")
                         .HasForeignKey("WL.Domain.Document", "FileDocumentId")
+                        .HasConstraintName("FK_D_F_FDI")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -317,6 +360,7 @@ namespace WL.Persistance.Migrations
                     b.HasOne("WL.Domain.EntityType", "EntityType")
                         .WithMany()
                         .HasForeignKey("EntityTypeId")
+                        .HasConstraintName("FK_E_ET_ETI")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -340,14 +384,16 @@ namespace WL.Persistance.Migrations
                     b.HasOne("WL.Domain.User.User", "User")
                         .WithOne("Credential")
                         .HasForeignKey("WL.Domain.User.Credential", "UserId")
+                        .HasConstraintName("FK_C_U_UI")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WL.Domain.User.Restore", b =>
+            modelBuilder.Entity("WL.Domain.User.RestoreCredential", b =>
                 {
                     b.HasOne("WL.Domain.User.User", "User")
                         .WithOne()
-                        .HasForeignKey("WL.Domain.User.Restore", "UserId")
+                        .HasForeignKey("WL.Domain.User.RestoreCredential", "UserId")
+                        .HasConstraintName("FK_RC_U_UI")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -355,7 +401,9 @@ namespace WL.Persistance.Migrations
                 {
                     b.HasOne("WL.Domain.User.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId1");
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_U_R_RI")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

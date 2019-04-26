@@ -27,7 +27,7 @@ namespace WL.Persistance.AnnotationTypes {
     }
 
     public AnnotationType Update(AnnotationType updated) {
-      var original = context.AnnotationTypes.Find(updated.AnnotationTypeId);
+      var original = context.AnnotationTypes.Find(updated.Id);
       original.Name = updated.Name;
       original.Root = updated.Root;
       context.SaveChanges();

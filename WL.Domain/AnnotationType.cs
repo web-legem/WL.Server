@@ -3,7 +3,7 @@
 namespace WL.Domain {
 
   public class AnnotationType {
-    public long AnnotationTypeId { get; set; }
+    public long Id { get; set; }
 
     [Required]
     [MaxLength(255)]

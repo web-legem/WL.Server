@@ -7,7 +7,7 @@ namespace WL.Application.Entities {
 
     public static EntityDto ToEntityDto(this Entity entity) {
       return new EntityDto {
-        Id = entity.EntityId,
+        Id = entity.Id,
         Name = entity.Name,
         Email = entity.Email,
         EntityType = entity.EntityTypeId,
@@ -24,7 +24,7 @@ namespace WL.Application.Entities {
 
     public static Entity ToEntity(this UpdateEntityCommand cmd) {
       return new Entity {
-        EntityId = cmd.Id,
+        Id = cmd.Id,
         Name = cmd.Name,
         Email = cmd.Email,
         EntityTypeId = cmd.EntityType

@@ -14,7 +14,7 @@ namespace WL.Application.Roles {
 
     public static Domain.User.Role ToRole(this UpdateRoleCommand res)
        => new Domain.User.Role {
-         RoleId = res.Id,
+         Id = res.Id,
          Name = res.Name,
          ConfigSystem = res.ConfigSystem,
          CreateDocuments = res.CreateDocuments,
@@ -23,7 +23,7 @@ namespace WL.Application.Roles {
 
     public static RoleDto ToRoleDTO(this Domain.User.Role res)
        => new RoleDto {
-         Id = res.RoleId,
+         Id = res.Id,
          Name = res.Name,
          ConfigSystem = res.ConfigSystem,
          CreateDocuments = res.CreateDocuments,

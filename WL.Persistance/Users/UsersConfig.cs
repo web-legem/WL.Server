@@ -8,7 +8,7 @@ namespace WL.Persistance.Users {
   internal class UsersConfig : IEntityTypeConfiguration<User> {
 
     public void Configure(EntityTypeBuilder<User> user) {
-      user.HasKey(x => x.UserId);
+      user.HasKey(x => x.Id);
       user.HasAlternateKey(usr => usr.Email);
       user.HasAlternateKey(usr => usr.IDDocument);
       user.HasAlternateKey(usr => usr.Nickname);

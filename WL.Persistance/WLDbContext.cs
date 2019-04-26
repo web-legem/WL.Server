@@ -9,6 +9,7 @@ using WL.Persistance.Documents.Files;
 using WL.Persistance.DocumentTypes;
 using WL.Persistance.Entities;
 using WL.Persistance.EntityTypes;
+using WL.Persistance.MigrationHelpers;
 using WL.Persistance.Roles;
 using WL.Persistance.Users;
 
@@ -24,7 +25,7 @@ namespace WL.Persistance {
     public DbSet<Role> Roles { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Credential> Credentials { get; set; }
-    public DbSet<Restore> Restores { get; set; }
+    public DbSet<RestoreCredential> RestoreCredentials { get; set; }
     public DbSet<Annotation> Annotations { get; set; }
 
     public DbQuery<AuxCount> Counts { get; set; }
@@ -45,6 +46,20 @@ namespace WL.Persistance {
       modelBuilder.ApplyConfiguration(new CredentialsConfig());
       modelBuilder.ApplyConfiguration(new RestoresConfig());
       modelBuilder.ApplyConfiguration(new AnnotationsConfig());
+
+      foreach (var entity in modelBuilder.Model.GetEntityTypes()) {
+        foreach (var key in entity.GetKeys()) {
+          key.Relational().Name = key.Relational().Name.ApplyKeyConventions();
+        }
+
+        foreach (var fk in entity.GetForeignKeys()) {
+          fk.Relational().Name = fk.Relational().Name.ApplyKeyConventions();
+        }
+
+        foreach (var index in entity.GetIndexes()) {
+          index.Relational().Name = index.Relational().Name.ApplyKeyConventions();
+        }
+      }
     }
   }
 }
