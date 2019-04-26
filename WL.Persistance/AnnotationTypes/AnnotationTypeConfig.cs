@@ -12,6 +12,8 @@ namespace WL.Persistance.AnnotationTypes {
       builder.HasIndex(at => at.Root).IsUnique();
 
       SeedData(builder);
+      builder.Property(dt => dt.Id)
+        .HasDefaultValueSql("\"AnnotationTypesSeq\".NEXTVAL");
     }
 
     private void SeedData(EntityTypeBuilder<AnnotationType> builder) {

@@ -34,6 +34,19 @@ namespace WL.Persistance {
       : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
+      modelBuilder.HasSequence<long>("DocumentTypesSeq")
+        .StartsAt(6L);
+      modelBuilder.HasSequence<long>("EntityTypesSeq")
+        .StartsAt(4L);
+      modelBuilder.HasSequence<long>("EntitiesSeq")
+        .StartsAt(6L);
+      modelBuilder.HasSequence<long>("AnnotationTypesSeq")
+        .StartsAt(4L);
+      modelBuilder.HasSequence<long>("RolesSeq")
+        .StartsAt(2L);
+      modelBuilder.HasSequence<long>("UsersSeq")
+        .StartsAt(2L);
+
       modelBuilder.ApplyConfiguration(new DocumentTypeConfig());
       modelBuilder.ApplyConfiguration(new EntityTypeConfig());
       modelBuilder.ApplyConfiguration(new EntityTypeDocumentTypeConfig());

@@ -10,6 +10,8 @@ namespace WL.Persistance.EntityTypes {
     public void Configure(EntityTypeBuilder<EntityType> builder) {
       builder.HasAlternateKey(et => et.Name);
       SeedData(builder);
+      builder.Property(dt => dt.Id)
+        .HasDefaultValueSql("\"EntityTypesSeq\".NEXTVAL");
     }
 
     public void SeedData(EntityTypeBuilder<EntityType> builder) {

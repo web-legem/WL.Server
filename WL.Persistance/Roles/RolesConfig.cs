@@ -12,6 +12,8 @@ namespace WL.Persistance.Roles {
     public void Configure(EntityTypeBuilder<Role> role) {
       role.HasIndex(r => r.Name).IsUnique();
       SeedData(role);
+      role.Property(dt => dt.Id)
+        .HasDefaultValueSql("\"RolesSeq\".NEXTVAL");
     }
 
     private void SeedData(EntityTypeBuilder<Role> roles) {

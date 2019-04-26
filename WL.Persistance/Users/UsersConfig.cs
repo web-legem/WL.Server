@@ -13,7 +13,13 @@ namespace WL.Persistance.Users {
       user.HasIndex(usr => usr.IDDocument).IsUnique();
       user.HasIndex(usr => usr.Nickname).IsUnique();
 
+      user.HasOne(usr => usr.Role)
+        .WithMany()
+        .OnDelete(DeleteBehavior.Restrict);
+
       SeedData(user);
+      user.Property(dt => dt.Id)
+        .HasDefaultValueSql("\"UsersSeq\".NEXTVAL");
     }
 
     private void SeedData(EntityTypeBuilder<User> users) {

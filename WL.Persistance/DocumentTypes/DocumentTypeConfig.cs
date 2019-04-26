@@ -13,6 +13,8 @@ namespace WL.Persistance.DocumentTypes {
       //.HasName("UQ_DT_Name"); // Indice unico, diferente de AlternateKey
 
       AddSeedData(documentType);
+      documentType.Property(dt => dt.Id)
+        .HasDefaultValueSql("\"DocumentTypesSeq\".NEXTVAL");
     }
 
     private void AddSeedData(EntityTypeBuilder<DocumentType> documentTypes) {
