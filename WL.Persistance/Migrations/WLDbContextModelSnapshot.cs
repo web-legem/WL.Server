@@ -77,6 +77,26 @@ namespace WL.Persistance.Migrations
                         .HasName("AK_AT_R");
 
                     b.ToTable("AnnotationTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Deroga",
+                            Root = "Derog"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Aclara",
+                            Root = "Acl"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Reglamenta",
+                            Root = "Regl"
+                        });
                 });
 
             modelBuilder.Entity("WL.Domain.Document", b =>
@@ -131,6 +151,33 @@ namespace WL.Persistance.Migrations
                         .HasName("UQ_DT_N");
 
                     b.ToTable("DocumentTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Acuerdo"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Circular"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Resolución"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Name = "Ley"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Name = "Decreto"
+                        });
                 });
 
             modelBuilder.Entity("WL.Domain.Entity", b =>
@@ -158,6 +205,43 @@ namespace WL.Persistance.Migrations
                         .HasName("IX_E_ETI");
 
                     b.ToTable("Entities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Email = "rectoria@udenar.edu.co",
+                            EntityTypeId = 1L,
+                            Name = "Rectoría"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Email = "ingenieria@udenar.edu.co",
+                            EntityTypeId = 2L,
+                            Name = "Facultad de Ingeniería"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Email = "sistemas@udenar.edu.co",
+                            EntityTypeId = 3L,
+                            Name = "Departamento de Sistemas"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Email = "medicina@udenar.edu.co",
+                            EntityTypeId = 2L,
+                            Name = "Facultad de Medicina"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Email = "enfermeria@udenar.edu.co",
+                            EntityTypeId = 3L,
+                            Name = "Depatamento de Enfermería"
+                        });
                 });
 
             modelBuilder.Entity("WL.Domain.EntityType", b =>
@@ -176,6 +260,23 @@ namespace WL.Persistance.Migrations
                         .HasName("AK_ET_N");
 
                     b.ToTable("EntityTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Rectoría"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Facultad"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Departamento"
+                        });
                 });
 
             modelBuilder.Entity("WL.Domain.EntityTypeDocumentType", b =>
@@ -191,6 +292,48 @@ namespace WL.Persistance.Migrations
                         .HasName("IX_ETDT_DTI");
 
                     b.ToTable("EntityTypeDocumentType");
+
+                    b.HasData(
+                        new
+                        {
+                            EntityTypeId = 1L,
+                            DocumentTypeId = 1L
+                        },
+                        new
+                        {
+                            EntityTypeId = 1L,
+                            DocumentTypeId = 2L
+                        },
+                        new
+                        {
+                            EntityTypeId = 1L,
+                            DocumentTypeId = 3L
+                        },
+                        new
+                        {
+                            EntityTypeId = 2L,
+                            DocumentTypeId = 3L
+                        },
+                        new
+                        {
+                            EntityTypeId = 2L,
+                            DocumentTypeId = 5L
+                        },
+                        new
+                        {
+                            EntityTypeId = 2L,
+                            DocumentTypeId = 1L
+                        },
+                        new
+                        {
+                            EntityTypeId = 3L,
+                            DocumentTypeId = 4L
+                        },
+                        new
+                        {
+                            EntityTypeId = 3L,
+                            DocumentTypeId = 2L
+                        });
                 });
 
             modelBuilder.Entity("WL.Domain.File", b =>

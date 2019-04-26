@@ -62,9 +62,9 @@ begin
 select
   count(*)
 from "Files" f
-JOIN "Documents" d ON f."DocumentId" = d."DocumentId"
-JOIN "Entities" e ON d."EntityId" = e."EntityId"
-JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."DocumentTypeId"
+JOIN "Documents" d ON f."DocumentId" = d."Id"
+JOIN "Entities" e ON d."EntityId" = e."Id"
+JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."Id"
 ' || CASE WHEN anyParameterIsNotNull
   THEN ' WHERE '
   ELSE '' END

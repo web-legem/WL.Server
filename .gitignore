@@ -282,6 +282,7 @@ node_modules/
 **/*.DesktopClient/ModelManifest.xml
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
+WL.Persistance/Migrations
 _Pvt_Extensions
 
 # Paket dependency manager
