@@ -9,6 +9,15 @@ namespace WL.Persistance.EntityTypes {
 
     public void Configure(EntityTypeBuilder<EntityType> builder) {
       builder.HasAlternateKey(et => et.Name);
+      SeedData(builder);
+    }
+
+    public void SeedData(EntityTypeBuilder<EntityType> builder) {
+      builder.HasData(
+        new { Id = 1L, Name = "Rectoría" },
+        new { Id = 2L, Name = "Facultad" },
+        new { Id = 3L, Name = "Departamento" }
+        );
     }
   }
 }

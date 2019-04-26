@@ -99,7 +99,7 @@ is
 begin
   query := '
 select
-  d."DocumentId",
+  d."Id",
   d."DocumentTypeId",
   d."EntityId",
   d."Number",
@@ -108,8 +108,8 @@ select
   d."FileDocumentId"
 from "Files" f
 JOIN "Documents" d ON f."DocumentId" = d."DocumentId"
-JOIN "Entities" e ON d."EntityId" = e."EntityId"
-JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."DocumentTypeId"
+JOIN "Entities" e ON d."EntityId" = e."Id"
+JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."Id"
 ' || CASE WHEN anyParameterIsNotNull
   THEN ' WHERE '
   ELSE '' END
@@ -131,7 +131,7 @@ JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."DocumentTypeId"
   end if;
 
   loop fetch res into
-        tuple."DocumentId" ,
+        tuple."Id" ,
         tuple."DocumentTypeId" ,
         tuple."EntityId" ,
         tuple."Number" ,

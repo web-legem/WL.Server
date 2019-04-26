@@ -1,6 +1,6 @@
 ﻿create or replace type document_typ as object
 (
-  "DocumentId" number,
+  "Id" number,
   "DocumentTypeId" number,
   "EntityId" number,
   "Number" varchar2(10),
