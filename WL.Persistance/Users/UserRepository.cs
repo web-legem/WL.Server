@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WL.Application.Common;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
 
@@ -14,7 +15,12 @@ namespace WL.Persistance.Users {
 
       public User Get(string nickname) {
          try {
-            return context.Users.FirstOrDefault(u => u.Nickname == nickname);
+            var user = context.Users.First(u => u.Nickname == nickname);
+            if(user != null) {
+               return user;
+            } else {
+               throw new FormFieldError("ORA1403", "NotFound");
+            }
          }
          catch (Exception e) {
             throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);

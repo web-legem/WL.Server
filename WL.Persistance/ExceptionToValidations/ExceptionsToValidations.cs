@@ -13,6 +13,11 @@ namespace WL.Persistance.ExceptionsToValidations {
          Console.WriteLine("------------------------------------------------------");
          Console.WriteLine(e);
          Console.WriteLine("------------------------------------------------------");
+
+         if (e is FormFieldError) {
+            return (FormFieldError)e;
+         }
+
          var innerE = e.InnerException;
          switch (innerE) {
             case OracleException o when o.Number == 1403:

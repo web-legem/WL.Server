@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WL.Application.Common;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
 
@@ -28,10 +30,9 @@ namespace WL.Persistance.Users {
                   context.SaveChanges();
                }
                return user.Id;
+            } else {               
+               throw new FormFieldError("ORA1403", "NotFound");
             }
-
-            // TODO - que pasa si el usuario no existe?
-            return 0;
          }
          catch (Exception e) {
             throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
