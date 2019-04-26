@@ -19,6 +19,30 @@ namespace WL.Persistance.Migrations
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
+            modelBuilder.Entity("WL.Domain.Annotation", b =>
+                {
+                    b.Property<long>("AnnotationId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("AnnotationTypeId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<long>("FromDocumentId");
+
+                    b.Property<long>("ToDocumentId");
+
+                    b.HasKey("AnnotationId");
+
+                    b.HasAlternateKey("FromDocumentId", "ToDocumentId");
+
+                    b.HasIndex("AnnotationTypeId");
+
+                    b.HasIndex("ToDocumentId");
+
+                    b.ToTable("Annotations");
+                });
+
             modelBuilder.Entity("WL.Domain.AnnotationType", b =>
                 {
                     b.Property<long>("AnnotationTypeId")
@@ -252,6 +276,24 @@ namespace WL.Persistance.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("WL.Domain.Annotation", b =>
+                {
+                    b.HasOne("WL.Domain.AnnotationType", "AnnotationType")
+                        .WithMany()
+                        .HasForeignKey("AnnotationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WL.Domain.Document", "From")
+                        .WithMany()
+                        .HasForeignKey("FromDocumentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WL.Domain.Document", "To")
+                        .WithMany()
+                        .HasForeignKey("ToDocumentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("WL.Domain.Document", b =>
                 {
                     b.HasOne("WL.Domain.DocumentType", "DocumentType")
@@ -283,11 +325,13 @@ namespace WL.Persistance.Migrations
                     b.HasOne("WL.Domain.DocumentType", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId")
+                        .HasConstraintName("FK_ETDT_DT")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WL.Domain.EntityType", "EntityType")
                         .WithMany("SupportedDocuments")
                         .HasForeignKey("EntityTypeId")
+                        .HasConstraintName("FK_ETDT_ET")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
