@@ -8,7 +8,7 @@ namespace WL.Persistance.EntityTypes {
   internal class EntityTypeConfig : IEntityTypeConfiguration<EntityType> {
 
     public void Configure(EntityTypeBuilder<EntityType> builder) {
-      builder.HasAlternateKey(et => et.Name);
+      builder.HasIndex(et => et.Name).IsUnique();
       SeedData(builder);
       builder.Property(dt => dt.Id)
         .HasDefaultValueSql("\"EntityTypesSeq\".NEXTVAL");
