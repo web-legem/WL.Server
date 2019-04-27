@@ -74,7 +74,7 @@ namespace WL.Application.Users.Queries {
                credential.newPasswordRequired = true;
             }
          } else {
-            throw new Exception("ERROR_CREDENTIAL");
+            throw new FormFieldError(FormFieldError.invalidUserCredentials);
          }
          return credential;
       }

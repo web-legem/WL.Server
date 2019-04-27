@@ -19,7 +19,7 @@ namespace WL.Persistance.Users {
             if(user != null) {
                return user;
             } else {
-               throw new FormFieldError("ORA1403", "NotFound");
+               throw new FormFieldError(FormFieldError.notFound);
             }
          }
          catch (Exception e) {
