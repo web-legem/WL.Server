@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
+using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
+using static WL.Persistance.Helpers.DbHelpers;
 
 namespace WL.Persistance.DocumentTypes {
 
@@ -15,10 +16,10 @@ namespace WL.Persistance.DocumentTypes {
 
       public DocumentType Get(long id) {
          try {
-            return context.DocumentTypes.Find(id);
+            return NullVerifier(() => context.DocumentTypes.Find(id));
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
@@ -27,7 +28,7 @@ namespace WL.Persistance.DocumentTypes {
             return context.DocumentTypes;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
@@ -38,7 +39,7 @@ namespace WL.Persistance.DocumentTypes {
             return documentType;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
@@ -50,7 +51,7 @@ namespace WL.Persistance.DocumentTypes {
             return original;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
@@ -61,7 +62,7 @@ namespace WL.Persistance.DocumentTypes {
             context.SaveChanges();
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
    }

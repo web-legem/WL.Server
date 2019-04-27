@@ -1,11 +1,10 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
 using WL.Application.Common;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
+using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
+using static WL.Persistance.Helpers.DbHelpers;
 
 namespace WL.Persistance.Users {
 
@@ -35,18 +34,17 @@ namespace WL.Persistance.Users {
             }
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
       public bool IsValidToken(long userId, string token) {
-         try {
-            // TODO - que hacer si no lo encuentra, validar
-            var restore = context.RestoreCredentials.Find(userId);
+         try {            
+            var restore = NullVerifier(() => context.RestoreCredentials.Find(userId));
             return restore.Token == token;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 

@@ -3,7 +3,6 @@ using System.Linq;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
 using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
-
 using static WL.Persistance.Helpers.DbHelpers;
 
 namespace WL.Persistance.AnnotationTypes {
@@ -43,7 +42,7 @@ namespace WL.Persistance.AnnotationTypes {
 
     public AnnotationType Update(AnnotationType updated) {
       try {
-        var original = context.AnnotationTypes.Find(updated.Id);
+        var original = Get(updated.Id);
         original.Name = updated.Name;
         original.Root = updated.Root;
         context.SaveChanges();
@@ -55,7 +54,7 @@ namespace WL.Persistance.AnnotationTypes {
 
     public void Delete(long id) {
       try {
-        var original = context.AnnotationTypes.Find(id);
+        var original = Get(id);
         context.AnnotationTypes.Remove(original);
         context.SaveChanges();
       } catch (Exception e) {

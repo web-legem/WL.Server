@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
+using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
+using static WL.Persistance.Helpers.DbHelpers;
 
 namespace WL.Persistance.Entities {
    public class EntityRepository : IEntityRepository {
@@ -14,10 +15,10 @@ namespace WL.Persistance.Entities {
 
       public Entity Get(long id) {
          try {
-            return context.Entities.Find(id);
+            return NullVerifier(() => context.Entities.Find(id));
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
@@ -26,7 +27,7 @@ namespace WL.Persistance.Entities {
             return context.Entities;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
@@ -37,13 +38,13 @@ namespace WL.Persistance.Entities {
             return entity;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
       public Entity Update(Entity entity) {
          try {
-            var original = context.Entities.Find(entity.Id);
+            var original = Get(entity.Id);
             original.Name = entity.Name;
             original.Email = entity.Email;
             original.EntityTypeId = entity.EntityTypeId;
@@ -51,19 +52,19 @@ namespace WL.Persistance.Entities {
             return original;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
       }
 
       public void Delete(long id) {
          try {
+            var original = Get(id);
+            context.Entities.Remove(original);
+            context.SaveChanges();
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
+            throw WrapOracleException(e);
          }
-         var original = context.Entities.Find(id);
-         context.Entities.Remove(original);
-         context.SaveChanges();
       }
    }
 }
