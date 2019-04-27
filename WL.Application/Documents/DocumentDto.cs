@@ -11,6 +11,6 @@ namespace WL.Application.Documents {
     public string Number { get; set; }
     public string FileName { get; set; }
     public string Issue { get; set; }
-    public DateTime PublicationDate { get; set; }
+    public DateTime? PublicationDate { get; set; }
   }
 }

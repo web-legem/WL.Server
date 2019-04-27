@@ -35,7 +35,7 @@ namespace WL.Persistance.Users {
             }
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -46,7 +46,7 @@ namespace WL.Persistance.Users {
             return restore.Token == token;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 

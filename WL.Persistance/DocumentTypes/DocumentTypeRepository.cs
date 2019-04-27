@@ -18,7 +18,7 @@ namespace WL.Persistance.DocumentTypes {
             return context.DocumentTypes.Find(id);
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -27,7 +27,7 @@ namespace WL.Persistance.DocumentTypes {
             return context.DocumentTypes;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -38,7 +38,7 @@ namespace WL.Persistance.DocumentTypes {
             return documentType;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -50,7 +50,7 @@ namespace WL.Persistance.DocumentTypes {
             return original;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -61,7 +61,7 @@ namespace WL.Persistance.DocumentTypes {
             context.SaveChanges();
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
    }
