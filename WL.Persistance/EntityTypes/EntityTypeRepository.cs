@@ -22,7 +22,7 @@ namespace WL.Persistance.EntityTypes {
            .First(et => et.Id == id);
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -34,7 +34,7 @@ namespace WL.Persistance.EntityTypes {
            .ThenInclude(sd => sd.DocumentType);
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -45,7 +45,7 @@ namespace WL.Persistance.EntityTypes {
             return entity;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -63,7 +63,7 @@ namespace WL.Persistance.EntityTypes {
             return original;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -74,7 +74,7 @@ namespace WL.Persistance.EntityTypes {
             context.SaveChanges();
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
    }

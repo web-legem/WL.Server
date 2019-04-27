@@ -6,6 +6,8 @@ using System.Text;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
 
+using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
+
 namespace WL.Persistance.Roles {
 
   public class RoleRepository : IRoleRepository {
@@ -25,7 +27,7 @@ namespace WL.Persistance.Roles {
         var role = context.Roles.First(r => credential.User.RoleId == r.Id);
         return role;
       } catch (Exception e) {
-        throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+        throw WrapOracleException(e);
       }
     }
 
@@ -33,14 +35,14 @@ namespace WL.Persistance.Roles {
       try {
         return context.Roles.Find(id);
       } catch (Exception e) {
-        throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+        throw WrapOracleException(e);
       }
     }
 
     public IQueryable<Role> GetAll() {
       try {
       } catch (Exception e) {
-        throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+        throw WrapOracleException(e);
       }
       return context.Roles;
     }
@@ -51,7 +53,7 @@ namespace WL.Persistance.Roles {
         context.SaveChanges();
         return entity;
       } catch (Exception e) {
-        throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+        throw WrapOracleException(e);
       }
     }
 
@@ -65,7 +67,7 @@ namespace WL.Persistance.Roles {
         context.SaveChanges();
         return original;
       } catch (Exception e) {
-        throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+        throw WrapOracleException(e);
       }
     }
 
@@ -75,7 +77,7 @@ namespace WL.Persistance.Roles {
         context.Roles.Remove(original);
         context.SaveChanges();
       } catch (Exception e) {
-        throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+        throw WrapOracleException(e);
       }
     }
   }

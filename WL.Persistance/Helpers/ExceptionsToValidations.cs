@@ -7,57 +7,56 @@ using WL.Application.Common.Errors;
 
 namespace WL.Persistance.ExceptionsToValidations {
 
-   public static class ExceptionsToValidations {
+  public static class ExceptionsToValidations {
 
-      public static Error WrapOracleExceptionsWithError(Exception e) {
-         Console.WriteLine("------------------------------------------------------");
-         Console.WriteLine(e);
-         Console.WriteLine("------------------------------------------------------");
+    public static Error WrapOracleException(Exception e) {
+      Console.WriteLine("------------------------------------------------------");
+      Console.WriteLine(e);
+      Console.WriteLine("------------------------------------------------------");
 
-         if (e is FormFieldError) {
-            return (FormFieldError)e;
-         }
-
-         var innerE = e.InnerException;
-         switch (innerE) {
-            case OracleException o when o.Number == 1403:
-               return new FormFieldError(FormFieldError.notFound, "ORA1403");
-
-            case OracleException o when o.Number == 1017:
-               return new FormFieldError(FormFieldError.invalidDbCredentials, "ORA1407");
-
-            case OracleException o when o.Number == 6503:
-               return new FormFieldError(FormFieldError.functionReturnedWithoutValue, "ORA6503");
-
-            case OracleException o when o.Number == 1 || o.Number == 2292:
-               return GetError(o.Message);
-
-            default:
-               Console.WriteLine(e);
-               return new FormFieldError("WL_ERROR"); //error generico
-         }
+      if (e is FormFieldError) {
+        return (FormFieldError)e;
       }
 
-      public static FormFieldError GetError(string msg) {
-         string column = null;
-         var regex = new Regex(@"\(WEBL.(.*?)\)");
-         var match = regex.Match(msg);
+      var innerE = e.InnerException;
+      switch (innerE) {
+        case OracleException o when o.Number == 1403:
+          return new FormFieldError(FormFieldError.notFound, "ORA1403");
 
-         if (match.Success) {
-            column = match.Groups[1].Value;
-         }
+        case OracleException o when o.Number == 1017:
+          return new FormFieldError(FormFieldError.invalidDbCredentials, "ORA1407");
 
-         if (!string.IsNullOrEmpty(column)) {
-            if (columnName.TryGetValue(column, out var mapValue)) {
-               return mapValue;
-            }
-            return new FormFieldError("WL_ERROR");
-         }
-         return new FormFieldError("WL_ERROR");
+        case OracleException o when o.Number == 6503:
+          return new FormFieldError(FormFieldError.functionReturnedWithoutValue, "ORA6503");
+
+        case OracleException o when o.Number == 1 || o.Number == 2292:
+          return GetError(o.Message);
+
+        default:
+          Console.WriteLine(e);
+          return new FormFieldError("WL_ERROR"); //error generico
+      }
+    }
+
+    public static FormFieldError GetError(string msg) {
+      string column = null;
+      var regex = new Regex(@"\(WEBL.(.*?)\)");
+      var match = regex.Match(msg);
+
+      if (match.Success) {
+        column = match.Groups[1].Value;
       }
 
-      static readonly Dictionary<string, FormFieldError> columnName = new Dictionary<string, FormFieldError> {
+      if (!string.IsNullOrEmpty(column)) {
+        if (columnName.TryGetValue(column, out var mapValue)) {
+          return mapValue;
+        }
+        return new FormFieldError("WL_ERROR");
+      }
+      return new FormFieldError("WL_ERROR");
+    }
 
+    static readonly Dictionary<string, FormFieldError> columnName = new Dictionary<string, FormFieldError> {
          { "IX_AT_N",      new FormFieldError(FormFieldError.uniqueConstraint, "TA_NAME") },
          { "IX_AT_R",      new FormFieldError(FormFieldError.uniqueConstraint, "TA_ROOT") },
          { "IX_ET_N",      new FormFieldError(FormFieldError.uniqueConstraint, "TE_NAME") },
@@ -81,7 +80,6 @@ namespace WL.Persistance.ExceptionsToValidations {
          { "FK_A_AT_ATI",     new FormFieldError(FormFieldError.integrityConstraint, "ANO") },
          { "FK_A_D_FI",       new FormFieldError(FormFieldError.integrityConstraint, "ANO") },
          { "FK_A_D_TI",       new FormFieldError(FormFieldError.integrityConstraint, "ANO") },
-
       };
-   }
+  }
 }

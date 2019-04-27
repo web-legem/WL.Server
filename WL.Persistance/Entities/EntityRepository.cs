@@ -17,7 +17,7 @@ namespace WL.Persistance.Entities {
             return context.Entities.Find(id);
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -26,7 +26,7 @@ namespace WL.Persistance.Entities {
             return context.Entities;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -37,7 +37,7 @@ namespace WL.Persistance.Entities {
             return entity;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -51,7 +51,7 @@ namespace WL.Persistance.Entities {
             return original;
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
       }
 
@@ -59,7 +59,7 @@ namespace WL.Persistance.Entities {
          try {
          }
          catch (Exception e) {
-            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleExceptionsWithError(e);
+            throw ExceptionsToValidations.ExceptionsToValidations.WrapOracleException(e);
          }
          var original = context.Entities.Find(id);
          context.Entities.Remove(original);
