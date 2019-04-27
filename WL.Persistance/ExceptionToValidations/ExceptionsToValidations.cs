@@ -61,26 +61,30 @@ namespace WL.Persistance.ExceptionsToValidations {
          { "IX_AT_N",      new FormFieldError(FormFieldError.uniqueConstraint, "TA_NAME") },
          { "IX_AT_R",      new FormFieldError(FormFieldError.uniqueConstraint, "TA_ROOT") },
          { "IX_ET_N",      new FormFieldError(FormFieldError.uniqueConstraint, "TE_NAME") },
-         { "IX_R_N",       new FormFieldError(FormFieldError.uniqueConstraint,  "ROLE_NAME") },
          { "IX_E_N",       new FormFieldError(FormFieldError.uniqueConstraint, "E_NAME") },
+
          { "IX_U_E",       new FormFieldError(FormFieldError.uniqueConstraint, "U_EMAIL") },
          { "IX_U_IDD",     new FormFieldError(FormFieldError.uniqueConstraint, "U_DOCUMENT") },
-         { "IX_U_N",       new FormFieldError(FormFieldError.uniqueConstraint, "E_NAME") },
+         { "IX_U_N",       new FormFieldError(FormFieldError.uniqueConstraint, "U_NICKNAME") },
+         { "IX_R_N",       new FormFieldError(FormFieldError.uniqueConstraint, "ROLE_NAME") },
+
          { "IX_C_T",       new FormFieldError(FormFieldError.uniqueConstraint, "E_TOKEN") },
          { "IX_D_DTI_EI_N_PY",   new FormFieldError(FormFieldError.uniqueConstraint, "SUPERAK") },
+         { "IX_DT_N",      new FormFieldError(FormFieldError.uniqueConstraint, "TD_NAME") },
 
-         //{ "FK_E_ET_ETI",      new FormFieldError("ORA1", "TD_NAME") },
-         { "FK_ETDT_DT_DTI",  new FormFieldError(FormFieldError.integrityConstraint, "DOCTYPE") },
-         { "FK_ETDT_ET_ETI",  new FormFieldError(FormFieldError.integrityConstraint, "ENTTYPE") },
+
+         { "FK_E_ET_ETI",     new FormFieldError(FormFieldError.integrityConstraint, "ENT") },
+         { "FK_ETDT_DT_DTI",  new FormFieldError(FormFieldError.integrityConstraint, "DOCTYP") },
+         { "FK_ETDT_ET_ETI",  new FormFieldError(FormFieldError.integrityConstraint, "ENTTYP") },
          { "FK_U_R_RI",       new FormFieldError(FormFieldError.integrityConstraint, "USR") },
 
-         { "FK_D_DT_DTI",     new FormFieldError(FormFieldError.integrityConstraint, "DOC") },
-         { "FK_D_E_EI",       new FormFieldError(FormFieldError.integrityConstraint, "DOC") },
+         { "FK_D_DT_DTI",     new FormFieldError(FormFieldError.integrityConstraint, "DOCTYP") },
+         { "FK_D_E_EI",       new FormFieldError(FormFieldError.integrityConstraint, "ENT") },
          { "FK_D_F_FDI",      new FormFieldError(FormFieldError.integrityConstraint, "DOC") },
 
-         { "FK_A_AT_ATI",     new FormFieldError(FormFieldError.integrityConstraint, "ANO") },
-         { "FK_A_D_FI",       new FormFieldError(FormFieldError.integrityConstraint, "ANO") },
-         { "FK_A_D_TI",       new FormFieldError(FormFieldError.integrityConstraint, "ANO") },
+         { "FK_A_AT_ATI",     new FormFieldError(FormFieldError.integrityConstraint, "ANOTYP") },
+         { "FK_A_D_FI",       new FormFieldError(FormFieldError.integrityConstraint, "DOC") },
+         { "FK_A_D_TI",       new FormFieldError(FormFieldError.integrityConstraint, "DOC") },
 
       };
    }
