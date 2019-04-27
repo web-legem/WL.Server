@@ -9,7 +9,13 @@ namespace WL.Persistance.Entities {
 
     public void Configure(EntityTypeBuilder<Entity> entity) {
       entity.HasIndex(e => e.Name).IsUnique();
+
+      entity.HasOne(e => e.EntityType)
+        .WithMany()
+        .OnDelete(DeleteBehavior.Restrict);
+
       SeedData(entity);
+
       entity.Property(dt => dt.Id)
         .HasDefaultValueSql("\"EntitiesSeq\".NEXTVAL");
     }

@@ -17,7 +17,7 @@ namespace WL.Persistance.EntityTypes {
         .WithMany()
         .HasForeignKey(etdt => etdt.DocumentTypeId)
         //.HasConstraintName("FK_ETDT_DT") // Para los nombres de las llaves foraneas
-        .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.Cascade);
 
       entityTypeDocumentType
         .HasOne(etdt => etdt.EntityType)
