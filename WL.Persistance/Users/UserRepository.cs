@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using WL.Application.Common;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
 using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
@@ -61,7 +62,9 @@ namespace WL.Persistance.Users {
             original.IDDocument = entity.IDDocument;
             original.RoleId = entity.RoleId;
             original.FirstName = entity.FirstName;
-            original.State = entity.State;
+            if(entity.Id != 1) {
+               original.State = entity.State;
+            }
             original.Email = entity.Email;
             context.SaveChanges();
             return original;
@@ -73,6 +76,9 @@ namespace WL.Persistance.Users {
 
       public void Delete(long id) {
          try {
+            if (id == 1) {
+               throw new FormFieldError(FormFieldError.notAllowedEdit);
+            }
             var original = Get(id);
             context.Users.Remove(original);
             context.SaveChanges();

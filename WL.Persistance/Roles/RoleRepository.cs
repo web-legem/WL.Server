@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using WL.Application.Common;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain.User;
 
@@ -59,6 +60,9 @@ namespace WL.Persistance.Roles {
 
       public Role Update(Role entity) {
          try {
+            if (entity.Id == 1) {
+               throw new FormFieldError(FormFieldError.notAllowedEdit);
+            }
             var original = Get(entity.Id);
             original.Name = entity.Name;
             original.CreateDocuments = entity.CreateDocuments;
@@ -74,6 +78,9 @@ namespace WL.Persistance.Roles {
 
       public void Delete(long id) {
          try {
+            if (id == 1) {
+               throw new FormFieldError(FormFieldError.notAllowedEdit);
+            }
             var original = Get(id);
             context.Roles.Remove(original);
             context.SaveChanges();

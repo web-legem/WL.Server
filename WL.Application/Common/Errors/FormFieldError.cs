@@ -23,6 +23,7 @@ namespace WL.Application.Common {
       }
       public FormFieldError(string errorType) {
          ErrorType = errorType;
+         FieldNames = new string[] { "" };
       }
 
       public FormFieldError(string errorType, string msg, bool generic) {
