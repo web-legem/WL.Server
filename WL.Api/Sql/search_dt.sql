@@ -104,10 +104,9 @@ select
   d."EntityId",
   d."Number",
   d."PublicationYear",
-  d."PublicationDate",
-  d."FileDocumentId"
+  d."PublicationDate"
 from "Files" f
-JOIN "Documents" d ON f."DocumentId" = d."DocumentId"
+JOIN "Documents" d ON f."DocumentId" = d."Id"
 JOIN "Entities" e ON d."EntityId" = e."Id"
 JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."Id"
 ' || CASE WHEN anyParameterIsNotNull
@@ -136,8 +135,7 @@ JOIN "DocumentTypes" dt ON d."DocumentTypeId" = dt."Id"
         tuple."EntityId" ,
         tuple."Number" ,
         tuple."PublicationYear" ,
-        tuple."PublicationDate" ,
-        tuple."FileDocumentId";
+        tuple."PublicationDate";
     exit when res%NOTFOUND;
     PIPE ROW(tuple);
   END LOOP;

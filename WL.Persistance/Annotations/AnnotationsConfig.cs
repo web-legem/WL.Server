@@ -12,10 +12,12 @@ namespace WL.Persistance.Annotations {
     public void Configure(EntityTypeBuilder<Annotation> annotation) {
       annotation.HasOne(a => a.From)
         .WithMany()
+        .HasForeignKey(a => a.FromDocumentId)
         .OnDelete(DeleteBehavior.Restrict);
 
       annotation.HasOne(a => a.To)
         .WithMany()
+        .HasForeignKey(a => a.ToDocumentId)
         .OnDelete(DeleteBehavior.Restrict);
 
       annotation.HasIndex(a => new { a.FromDocumentId, a.ToDocumentId })

@@ -13,7 +13,7 @@ namespace WL.Application.Common {
     public static Validation<Error, T> ValidateNonNull<T>(T obj) where T : class
        => obj != null
           ? Success<Error, T>(obj)
-          : Fail<Error, T>(new Error());
+          : Fail<Error, T>(new Error { Message = "NullObject" });
 
     public static Validation<Error, T[]> ValidateArrayNonEmpty<T>(T[] obj)
        => obj.Length > 0
