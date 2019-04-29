@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WL.Application.Annotations.Commands;
+using WL.Application.Common;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
 using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
@@ -21,7 +22,12 @@ namespace WL.Persistance.Annotations {
     public Annotation Create(CreateAnnotationCommand cmd) {
       try {
         using (var transaction = context.Database.BeginTransaction()) {
-          var from = NullVerifier(() => context.Documents.Find(cmd.FromDocumentId));
+          var from = NullVerifier(() => context.Documents
+            .Include(d => d.File)
+            .FirstOrDefault(d => d.Id == cmd.FromDocumentId));
+
+          if (from.File == null)
+            throw new FormFieldError(FormFieldError.notFound, "file");
 
           var to = context.Documents.FirstOrDefault(d =>
             d.DocumentTypeId == cmd.ToDocumentTypeId
@@ -103,7 +109,16 @@ namespace WL.Persistance.Annotations {
 
     private int GetRemmainingAnnotationsCount(Document documentDestiny)
       => context.Annotations
+        .AsNoTracking()
         .Where(a => a.ToDocumentId == documentDestiny.Id)
         .Count();
+
+    public IQueryable<Annotation> GetDocumentAnnotations(long documentId) {
+      return context.Annotations
+        .Include(a => a.To)
+        .Include(a => a.From)
+        .Where(a => a.FromDocumentId == documentId || a.ToDocumentId == documentId)
+        .AsNoTracking();
+    }
   }
 }

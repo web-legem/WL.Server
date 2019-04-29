@@ -10,5 +10,7 @@ namespace WL.Application.Interfaces.Persistance {
   public interface IAnnotationRepository : IRepository<Annotation> {
 
     Annotation Create(CreateAnnotationCommand cmd);
+
+    IQueryable<Annotation> GetDocumentAnnotations(long documentId);
   }
 }

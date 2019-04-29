@@ -2,9 +2,11 @@
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Linq;
+using WL.Application.Common;
 using WL.Application.Documents.Queries;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
+using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
 
 namespace WL.Persistance.Documents {
 
@@ -24,7 +26,22 @@ namespace WL.Persistance.Documents {
 
       using (var transaction = context.Database.BeginTransaction()) {
         try {
-          context.Documents.Add(document);
+          var oldDocument = context.Documents.Include(d => d.File).Where(d => d.DocumentTypeId == document.DocumentTypeId
+            && d.EntityId == document.EntityId
+            && d.Number == document.Number
+            && d.PublicationYear == d.PublicationYear
+          ).FirstOrDefault();
+
+          if (oldDocument != null) { // exist
+            if (oldDocument.File == null) { // Has no file
+              file.Document = oldDocument;
+            } else { // exist with file
+              throw new FormFieldError(FormFieldError.uniqueConstraint);
+            }
+          } else {
+            context.Documents.Add(document);
+            context.SaveChanges();
+          }
 
           context.Files.Add(file);
 
@@ -34,7 +51,7 @@ namespace WL.Persistance.Documents {
         } catch (Exception ex) {
           Console.WriteLine(ex);
           transaction.Rollback();
-          throw;
+          throw WrapOracleException(ex);
         }
       }
 
@@ -132,7 +149,6 @@ namespace WL.Persistance.Documents {
 
       using (var connection = context.Database.GetDbConnection() as OracleConnection) {
         connection.Open();
-        // TODO - probar si es posible retirar el namespace WEBL de la siguiente instrucción
         using (var command = new OracleCommand("SEARCH_COUNT", connection)) {
           command.CommandType = System.Data.CommandType.StoredProcedure;
           command.BindByName = true;
