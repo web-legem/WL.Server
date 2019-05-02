@@ -168,9 +168,13 @@ namespace WL.Persistance.Documents {
     }
 
     public Document Get(long id) {
-      return context.Documents
-        .Include(d => d.File)
-        .First(d => d.Id == id);
+      try {
+        return context.Documents
+          .Include(d => d.File)
+          .FirstOrDefault(d => d.Id == id);
+      } catch (Exception e) {
+        throw WrapOracleException(e);
+      }
     }
 
     public IQueryable<Document> GetAll() => throw new NotImplementedException();

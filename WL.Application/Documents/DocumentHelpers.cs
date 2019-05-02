@@ -42,9 +42,9 @@ namespace WL.Application.Documents {
         Number = document.Number,
         PublicationYear = document.PublicationYear,
         PublicationDate = document.PublicationDate,
-        FileId = document.File.DocumentId,
-        Issue = document.File.Issue,
-        FileName = document.File.Name
+        FileId = document.File?.DocumentId,
+        Issue = document.File?.Issue,
+        FileName = document.File?.Name
       };
     }
   }

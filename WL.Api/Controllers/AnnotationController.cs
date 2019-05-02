@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WL.Api.Infrastructure;
 using WL.Application.Annotations.Commands;
 using WL.Application.Annotations.Queries;
@@ -48,7 +49,7 @@ namespace WL.Api.Controllers {
            StatusCode(500, err)
            );
 
-    [HttpGet("documents/{id}")]
+    [HttpGet("document/{id}")]
     public IActionResult GetDocumentAnnotations(long id)
       => documentAnnotationsQuery
         .Execute(id)

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
+using WL.Application.Annotations.Queries;
 using WL.Application.Documents.Commands;
 using WL.Application.Documents.Queries;
 
@@ -14,17 +15,20 @@ namespace WL.Api.Controllers {
     readonly SearchDocumentsQuery searchDocumentsQuery;
     readonly SearchCountQuery searchCountQuery;
     readonly DownloadFileQuery downloadFileQuery;
+    readonly GetOneDocumentQuery getOneQuery;
 
     public DocumentController(
       CreateDocumentCommandHandler createCommandHandler,
       SearchDocumentsQuery searchDocumentsQuery,
       SearchCountQuery searchCountQuery,
-      DownloadFileQuery downloadFileQuery
+      DownloadFileQuery downloadFileQuery,
+      GetOneDocumentQuery getOneQuery
     ) {
       _createCommandHandler = createCommandHandler;
       this.searchDocumentsQuery = searchDocumentsQuery;
       this.searchCountQuery = searchCountQuery;
       this.downloadFileQuery = downloadFileQuery;
+      this.getOneQuery = getOneQuery;
     }
 
     [HttpPost]
@@ -43,6 +47,15 @@ namespace WL.Api.Controllers {
          .Match(x => x.Match<IActionResult>(Ok, BadRequest),
             ex => StatusCode(500, ex));
     }
+
+    [HttpGet("{id}")]
+    public IActionResult GetOne(long id)
+      => getOneQuery.Execute(id).Match(
+        Succ: x =>
+        Ok(x),
+        Fail: e =>
+        StatusCode(StatusCodes.Status500InternalServerError, e)
+        );
 
     [HttpGet("search")]
     public IActionResult searchDocuments(long? page, long? pageSize, string wordsToSearch, long? publicationDate,

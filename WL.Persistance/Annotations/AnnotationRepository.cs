@@ -53,6 +53,10 @@ namespace WL.Persistance.Annotations {
             context.SaveChanges();
           }
 
+          if (from.PublicationYear < to.PublicationYear)
+            throw new FormFieldError(FormFieldError.invalidDate, new[] { "toPublicationYear", "fromPublicationYear" });
+          // TODO - verificar si el año es el mismo y la entidad es la misma entonces el numero debe ser mayor siempre que sea parseables a numeros
+
           annotation.ToDocumentId = to.Id;
 
           context.Annotations.Add(annotation);
@@ -62,7 +66,6 @@ namespace WL.Persistance.Annotations {
           return annotation;
         }
       } catch (Exception e) {
-        context.Database.RollbackTransaction();
         throw WrapOracleException(e);
       }
     }
