@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using WL.Api.Infrastructure;
 using WL.Application.Annotations.Commands;
 using WL.Application.Annotations.Queries;
+using WL.Application.AnnotationTypes.Queries;
+using WL.Application.DocumentTypes.Queries;
+using WL.Application.Entities.Queries;
 using static WL.Api.Infrastructure.PermissionsAttribute;
 
 namespace WL.Api.Controllers {
@@ -14,15 +17,23 @@ namespace WL.Api.Controllers {
     readonly CreateAnnotationCommandHandler createCommand;
     readonly DeleteAnnotationCommandHandler deleteCommand;
     readonly GetDocumentAnnotationsQuery documentAnnotationsQuery;
+    readonly GetAllDocumentTypesQuery getDTsQuery;
+    readonly GetAllEntitiesQuery getEsQuery;
+    readonly GetAllAnnotationTypesQuery getAATsQuery;
 
     public AnnotationController(
       CreateAnnotationCommandHandler createCommand,
       DeleteAnnotationCommandHandler deleteCommand,
-      GetDocumentAnnotationsQuery documentAnnotationsQuery
-    ) {
+      GetDocumentAnnotationsQuery documentAnnotationsQuery,
+      GetAllDocumentTypesQuery getDTsQuery,
+      GetAllEntitiesQuery getEsQuery,
+      GetAllAnnotationTypesQuery getAATsQuery) {
       this.createCommand = createCommand;
       this.deleteCommand = deleteCommand;
       this.documentAnnotationsQuery = documentAnnotationsQuery;
+      this.getDTsQuery = getDTsQuery;
+      this.getEsQuery = getEsQuery;
+      this.getAATsQuery = getAATsQuery;
     }
 
     [HttpPost]
@@ -59,5 +70,32 @@ namespace WL.Api.Controllers {
           Fail: err =>
          StatusCode(500, err)
         );
+
+    [HttpGet("entities")]
+    public IActionResult GetEntities() {
+      return getEsQuery
+            .Execute()
+            .Match(
+               x => Ok(x),
+               ex => StatusCode(500, ex));
+    }
+
+    [HttpGet("documentTypes")]
+    public IActionResult GetDocumentTypes() {
+      return getDTsQuery
+            .Execute()
+            .Match(
+               x => Ok(x),
+               ex => StatusCode(500, ex));
+    }
+
+    [HttpGet("annotationTypes")]
+    public IActionResult GetAnnotationTypes() {
+      return getAATsQuery
+            .Execute()
+            .Match(
+               x => Ok(x),
+               ex => StatusCode(500, ex));
+    }
   }
 }

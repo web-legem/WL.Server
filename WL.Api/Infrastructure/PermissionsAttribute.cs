@@ -3,9 +3,9 @@
 namespace WL.Api.Infrastructure {
 
   public class PermissionsAttribute : Attribute {
-    public const string CreateDocument = "createDocument";
-    public const string DeleteDocument = "deleteDocument";
-    public const string ConfigSystem = "configSystem";
+    public const string CreateDocument = "CreateDocument";
+    public const string DeleteDocument = "DeleteDocument";
+    public const string ConfigSystem = "ConfigSystem";
 
     public enum MapPerm {
       CreateDocument,

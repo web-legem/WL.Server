@@ -2,33 +2,43 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
+using WL.Api.Infrastructure;
 using WL.Application.Annotations.Queries;
 using WL.Application.Documents.Commands;
 using WL.Application.Documents.Queries;
+using WL.Application.DocumentTypes.Queries;
+using WL.Application.Entities.Queries;
+using static WL.Api.Infrastructure.PermissionsAttribute;
 
 namespace WL.Api.Controllers {
 
   [Produces("application/json")]
   [Route("api/Document")]
+  [Permissions(MapPerm.CreateDocument)]
   public class DocumentController : Controller {
     readonly CreateDocumentCommandHandler _createCommandHandler;
     readonly SearchDocumentsQuery searchDocumentsQuery;
     readonly SearchCountQuery searchCountQuery;
     readonly DownloadFileQuery downloadFileQuery;
     readonly GetOneDocumentQuery getOneQuery;
+    readonly GetAllDocumentTypesQuery getDTsQuery;
+    readonly GetAllEntitiesQuery getEsQuery;
 
     public DocumentController(
       CreateDocumentCommandHandler createCommandHandler,
       SearchDocumentsQuery searchDocumentsQuery,
       SearchCountQuery searchCountQuery,
       DownloadFileQuery downloadFileQuery,
-      GetOneDocumentQuery getOneQuery
-    ) {
+      GetOneDocumentQuery getOneQuery,
+      GetAllDocumentTypesQuery getDTsQuery,
+      GetAllEntitiesQuery getEsQuery) {
       _createCommandHandler = createCommandHandler;
       this.searchDocumentsQuery = searchDocumentsQuery;
       this.searchCountQuery = searchCountQuery;
       this.downloadFileQuery = downloadFileQuery;
       this.getOneQuery = getOneQuery;
+      this.getDTsQuery = getDTsQuery;
+      this.getEsQuery = getEsQuery;
     }
 
     [HttpPost]
@@ -110,6 +120,24 @@ namespace WL.Api.Controllers {
             .Execute(id)
             .Match(
                x => (IActionResult)File(x, "application/pdf"),
+               ex => StatusCode(500, ex));
+    }
+
+    [HttpGet("entities")]
+    public IActionResult GetEntities() {
+      return getEsQuery
+            .Execute()
+            .Match(
+               x => Ok(x),
+               ex => StatusCode(500, ex));
+    }
+
+    [HttpGet("documentTypes")]
+    public IActionResult GetDocumentTypes() {
+      return getDTsQuery
+            .Execute()
+            .Match(
+               x => Ok(x),
                ex => StatusCode(500, ex));
     }
   }
