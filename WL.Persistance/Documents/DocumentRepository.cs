@@ -108,7 +108,7 @@ namespace WL.Persistance.Documents {
       return context.Documents
         .Include(d => d.File)
 
-        .FromSql("SELECT * FROM search_dt(:page, :page_size, :words_to_search, :entity, :document_type, :doc_number, :pub_year, :order_by, :descend)",
+        .FromSql("SELECT * FROM TABLE(search_dt(:page, :page_size, :words_to_search, :entity, :document_type, :doc_number, :pub_year, :order_by, :descend))",
           pagePrm,
           pageSizePrm,
           wordsToSearchPrm,
