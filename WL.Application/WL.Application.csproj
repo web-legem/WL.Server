@@ -9,8 +9,8 @@
       <Guid>17c8bc4c-3f13-4b36-9e05-20106ede6239</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
+      <Lcid>0</Lcid>
       <Isolated>false</Isolated>
     </COMReference>
   </ItemGroup>

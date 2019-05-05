@@ -63,8 +63,12 @@ namespace WL.Application.Users.Queries {
                credential.permission = "1";
                string hostName = Dns.GetHostName();
                var myIP = Dns.GetHostEntry(hostName).AddressList[0].ToString();
-               credential.photo = address + "/api/User/Photo?id=" + user.Id + "&mode=min";
-               Console.WriteLine(credential.photo);
+
+               if (UserHelpers.existThumbnail(user.Id)) {
+                  credential.photo = address + "/api/User/Photo?id=" + user.Id + "&mode=min";
+               } else {
+                  credential.photo = "none";
+               }
                Credential cre = new Credential {
                   UserId = credential.id,
                   Token = credential.token,
