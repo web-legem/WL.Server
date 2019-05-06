@@ -2,6 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WL.Application.Common;
 using WL.Application.Documents.Queries;
 using WL.Application.Interfaces.Persistance;
@@ -70,9 +71,13 @@ namespace WL.Persistance.Documents {
         "page_size", OracleDbType.Int64, System.Data.ParameterDirection.Input);
       pageSizePrm.Value = msg.PageSize.HasValue ? msg.PageSize.Value : (object)null;
 
+      var wordsToSearchOracleFormatForMultipleWords = Regex.Replace(msg.WordsToSearch, @"\s+", " ");
+      wordsToSearchOracleFormatForMultipleWords = wordsToSearchOracleFormatForMultipleWords.Trim();
+      wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearchOracleFormatForMultipleWords, @"\s+", ",");
+
       var wordsToSearchPrm = new OracleParameter(
         "words_to_search", OracleDbType.Varchar2, System.Data.ParameterDirection.Input) {
-        Value = msg.WordsToSearch
+        Value = wordsToSearchOracleFormatForMultipleWords
       };
 
       var entityIdPrm = new OracleParameter(
