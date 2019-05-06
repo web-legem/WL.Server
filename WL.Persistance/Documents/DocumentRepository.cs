@@ -71,6 +71,7 @@ namespace WL.Persistance.Documents {
         "page_size", OracleDbType.Int64, System.Data.ParameterDirection.Input);
       pageSizePrm.Value = msg.PageSize.HasValue ? msg.PageSize.Value : (object)null;
 
+      msg.WordsToSearch = msg.WordsToSearch ?? "";
       var wordsToSearchOracleFormatForMultipleWords = Regex.Replace(msg.WordsToSearch, @"\s+", " ");
       wordsToSearchOracleFormatForMultipleWords = wordsToSearchOracleFormatForMultipleWords.Trim();
       wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearchOracleFormatForMultipleWords, @"\s+", ",");
@@ -137,8 +138,13 @@ namespace WL.Persistance.Documents {
         OracleDbType = OracleDbType.Int64
       };
 
+      wordsToSearch = wordsToSearch ?? "";
+      var wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearch, @"\s+", " ");
+      wordsToSearchOracleFormatForMultipleWords = wordsToSearchOracleFormatForMultipleWords.Trim();
+      wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearchOracleFormatForMultipleWords, @"\s+", ",");
+
       var words = new OracleParameter("words_to_search", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-      words.Value = wordsToSearch;
+      words.Value = wordsToSearchOracleFormatForMultipleWords;
 
       var entity = new OracleParameter("entity", OracleDbType.Int64, System.Data.ParameterDirection.Input);
       entity.Value = entityId.HasValue ? entityId.Value : (object)null;
