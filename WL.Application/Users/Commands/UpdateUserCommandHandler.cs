@@ -33,7 +33,7 @@ namespace WL.Application.Users.Commands {
         UserHelpers.SaveFile(user.Id + ".png", stream);
         return true;
       }
-      if(stream == null){
+      if(stream == null && fileWasChange){
          UserHelpers.DeleteFile(user.Id);
          return false;
       }

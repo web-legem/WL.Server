@@ -102,6 +102,9 @@ namespace WL.Application.Users.Queries {
          return () => {
             string token = Guid.NewGuid().ToString();
             long userId = _ResRepo.CreateRestoreToken(email, token);
+            if (userId == 0) {
+               return false;
+            }
             string link = Address + "?id=" + userId + "&token=" + token + "";
             string subject = "WebLegem: Recuperación de contraseña";
             string msg = "Recibimos una solicitud de cambio de contraseña. Para confirmar tu nueva contraseña haz click en el siguiente enlace:"
