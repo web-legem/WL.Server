@@ -38,7 +38,7 @@ namespace WL.Application.Documents.Commands {
     }
 
     static (bool coincide, string textoCoincidente) CoincideConAlgunAsunto(string parrafo) {
-      var match = new Regex(@"ASUNTO|Por el cual",
+      var match = new Regex(@"ASUNTO|Por el cual|Por la cual|Por lo cual",
          RegexOptions.IgnoreCase).Match(parrafo);
       return (match.Success, match.Value);
     }
