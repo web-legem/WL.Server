@@ -23,6 +23,7 @@ namespace WL.Api.Controllers {
     readonly GetOneDocumentQuery getOneQuery;
     readonly GetAllDocumentTypesQuery getDTsQuery;
     readonly GetAllEntitiesQuery getEsQuery;
+    //readonly SendNotificationCommandHGandler sendNotificationCommand;
 
     public DocumentController(
       CreateDocumentCommandHandler createCommandHandler,
@@ -31,7 +32,9 @@ namespace WL.Api.Controllers {
       DownloadFileQuery downloadFileQuery,
       GetOneDocumentQuery getOneQuery,
       GetAllDocumentTypesQuery getDTsQuery,
-      GetAllEntitiesQuery getEsQuery) {
+      GetAllEntitiesQuery getEsQuery
+      //SendNotificationCommandHGandler sendNotificationCommand) {
+      ) {
       _createCommandHandler = createCommandHandler;
       this.searchDocumentsQuery = searchDocumentsQuery;
       this.searchCountQuery = searchCountQuery;
@@ -39,6 +42,7 @@ namespace WL.Api.Controllers {
       this.getOneQuery = getOneQuery;
       this.getDTsQuery = getDTsQuery;
       this.getEsQuery = getEsQuery;
+      //this.sendNotificationCommand = sendNotificationCommand;
     }
 
     [HttpPost]
@@ -140,5 +144,11 @@ namespace WL.Api.Controllers {
                x => Ok(x),
                ex => StatusCode(500, ex));
     }
+
+    //[HttpPost("notify/{documentId}")]
+    //public IActionResult Notify([FromBody] string[] emails, long documentId)
+    //    => sendNotificationCommand.Execute(emails, documentId).Match(
+    //      Succ: _ => Ok() as IActionResult,
+    //      Fail: err => StatusCode(500, err));
   }
 }
