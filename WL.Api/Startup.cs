@@ -53,7 +53,7 @@ namespace WL.Api {
 
       public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
          if (env.IsDevelopment()) {
-            app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();            
          }
 
          app.UseCors(builder => builder
@@ -62,7 +62,7 @@ namespace WL.Api {
            .AllowAnyOrigin()
          );
 
-         app.UseMvc();
+         app.UseMvc();         
       }
 
       void ConfigureAppDirectories() {

@@ -34,6 +34,39 @@ namespace WL.Persistance.Users {
           Email = "andres_solarte@hotmail.com",
           State = "active",
           RoleId = 1L
+        },
+        new {
+           Id = 2L,
+           Nickname = "andres",
+           FirstName = "andres",
+           LastName = "andres",
+           IDDocument = "1085284234",
+           Password = "202cb962ac59075b964b07152d234b70",
+           Email = "andres.9010@hotmail.com",
+           State = "active",
+           RoleId = 1L
+        },
+        new {
+           Id = 3L,
+           Nickname = "mario",
+           FirstName = "mario",
+           LastName = "mario",
+           IDDocument = "111111",
+           Password = "202cb962ac59075b964b07152d234b70",
+           Email = "marioffdsw@gmail.com",
+           State = "active",
+           RoleId = 1L
+        },
+        new {
+           Id = 4L,
+           Nickname = "adry",
+           FirstName = "adry",
+           LastName = "adry",
+           IDDocument = "222222",
+           Password = "202cb962ac59075b964b07152d234b70",
+           Email = "andry2507@gmail.com",
+           State = "active",
+           RoleId = 1L
         }
         );
     }
