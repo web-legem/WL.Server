@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Helpers\basicMailTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="OcrConfig.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

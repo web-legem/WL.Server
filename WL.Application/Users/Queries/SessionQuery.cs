@@ -112,8 +112,7 @@ namespace WL.Application.Users.Queries {
                + "<p><a href = \"" + link + "\" > Link de recuperacion </a></p> "
                + "<br/>"
                + "Por favor, ignora este mensaje en el caso que no hayas solicitado un cambio de contraseña de tu cuenta.";
-            SendMail a = new SendMail(Address);
-            return a.Send(email, subject, msg);
+            return SendMail.Send(email, subject, msg);
          };
       }
 
@@ -122,11 +121,6 @@ namespace WL.Application.Users.Queries {
       public Try<bool> VerifyToken(long id, string token) {
          return ()
             => _ResRepo.IsValidToken(id, token);
-      }
-
-      public Try<bool> SendMailToUser(string Address) {
-         var a = new SendMail(Address);
-         return () => a.Send("andres.9010@hotmail.com", "prueba", "este es un mensaje");
       }
    }
 }
