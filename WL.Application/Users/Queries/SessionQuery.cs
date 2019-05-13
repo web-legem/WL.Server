@@ -13,6 +13,7 @@ using WL.Domain.User;
 using System.Net;
 using WL.Application.Helpers;
 using WL.Application.Common.Errors;
+using System.Collections.Generic;
 
 namespace WL.Application.Users.Queries {
 
@@ -20,11 +21,14 @@ namespace WL.Application.Users.Queries {
       readonly IUserRepository _repository;
       readonly ICredentialRepository _CreRepo;
       readonly IRestoreRepository _ResRepo;
+      readonly IRoleRepository _RoleRepo;
 
-      public SessionQuery(IUserRepository repository, ICredentialRepository CreRepo, IRestoreRepository ResRepo) {
+      public SessionQuery(IUserRepository repository, ICredentialRepository CreRepo,
+         IRestoreRepository ResRepo, IRoleRepository roleRepository) {
          _repository = repository;
          _CreRepo = CreRepo;
          _ResRepo = ResRepo;
+         _RoleRepo = roleRepository;
       }
 
       // sign in -----------------------------------------------------------
@@ -60,7 +64,6 @@ namespace WL.Application.Users.Queries {
                credential.firstName = user.FirstName;
                credential.newPasswordRequired = false;
                credential.token = GetUniqueToken(user.Id);
-               credential.permission = "1";
                string hostName = Dns.GetHostName();
                var myIP = Dns.GetHostEntry(hostName).AddressList[0].ToString();
 
@@ -74,6 +77,12 @@ namespace WL.Application.Users.Queries {
                   Token = credential.token,
                };
                _CreRepo.Create(cre);
+               Role role = _RoleRepo.Get(credential.token);
+               credential.permissions = new List<Perm>{
+                     new Perm { Name = "configSystem", Can = role.ConfigSystem == 1 },
+                     new Perm { Name = "createDocuments", Can = role.CreateDocuments == 1 },
+                     new Perm { Name = "deleteDocuments", Can = role.DeleteDocuments == 1 }
+                 };
             } else {
                credential.newPasswordRequired = true;
             }
@@ -122,5 +131,16 @@ namespace WL.Application.Users.Queries {
          return ()
             => _ResRepo.IsValidToken(id, token);
       }
+
+      public struct Perm {
+         public string Name { get; set; }
+         public bool Can { get; set; }
+         public Perm(string name, bool can) {
+            Name = name;
+            Can = can;
+         }
+      }
+
    }
+
 }

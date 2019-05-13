@@ -9,7 +9,7 @@ namespace WL.Application.Users {
       public string lastName { get; set; }
       public string document { get; set; }
       public string token { get; set; }
-      public String permission { get; set; }
+      public Object permissions { get; set; }
       public String photo { get; set; }
 
    }
