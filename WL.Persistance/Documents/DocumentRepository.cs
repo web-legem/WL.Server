@@ -188,6 +188,30 @@ namespace WL.Persistance.Documents {
       }
     }
 
+    public PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg) {
+      var page = msg.Page ?? 1;
+      var pageSize = msg.PageSize ?? 10;
+      var desc = msg.Descend ?? false;
+      var skip = (page - 1) * pageSize;
+      var documentsWithoutFile = context.Documents
+        .Include(x => x.File)
+        .Include(d => d.Entity)
+        .Include(d => d.DocumentType)
+        .Where(x => x.File == null);
+
+      IQueryable<Document> query;
+      if (desc) {
+        query = documentsWithoutFile.OrderByDescending(d => d.Entity.Name);
+      } else {
+        query = documentsWithoutFile.OrderBy(d => d.Entity.Name);
+      }
+
+      return new PagedResult<Document> {
+        Count = documentsWithoutFile.Count(),
+        Page = query.Skip(skip).Take(pageSize)
+      };
+    }
+
     public IQueryable<Document> GetAll() => throw new NotImplementedException();
 
     public Document Create(Document entity) => throw new NotImplementedException();

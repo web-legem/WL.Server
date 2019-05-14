@@ -17,76 +17,76 @@ using static WL.Application.Helpers.DirectoryHelpers;
 
 namespace WL.Api {
 
-   public class Startup {
+  public class Startup {
 
-      public Startup(IConfiguration configuration) {
-         Configuration = configuration;
-         ConfigureAppDirectories();
+    public Startup(IConfiguration configuration) {
+      Configuration = configuration;
+      ConfigureAppDirectories();
+    }
+
+    public IConfiguration Configuration { get; }
+
+    public IServiceProvider ConfigureServices(IServiceCollection services) {
+      services.AddMvc(options => {
+        //options.ModelValidatorProviders.Clear();
+        options.Filters.Add(typeof(AuthFilter));
+      }).AddJsonOptions(json =>
+         json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+      );
+      services.AddCors();
+
+      var connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+      services.AddDbContext<WLDbContext>(options => {
+        options.UseOracle(connectionString, b => b.MigrationsAssembly("WL.Persistance"));
+      });
+
+      //services.Configure<ApiBehaviorOptions>(options => {
+      //  options.SuppressModelStateInvalidFilter = true;
+      //});
+
+      var containerBuilder = new ContainerBuilder();
+      containerBuilder.RegisterModule<AutofacModule>();
+      containerBuilder.Populate(services);
+      var container = containerBuilder.Build();
+      return new AutofacServiceProvider(container);
+    }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+      if (env.IsDevelopment()) {
+        app.UseDeveloperExceptionPage();
       }
 
-      public IConfiguration Configuration { get; }
+      app.UseCors(builder => builder
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin()
+      );
 
-      public IServiceProvider ConfigureServices(IServiceCollection services) {
-         services.AddMvc(options => {
-            //options.ModelValidatorProviders.Clear();
-            options.Filters.Add(typeof(AuthFilter));
-         }).AddJsonOptions(json => 
-            json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-         );
-         services.AddCors();
+      app.UseMvc();
+    }
 
-         var connectionString = Configuration["ConnectionStrings:DefaultConnection"];
-         services.AddDbContext<WLDbContext>(options => {
-            options.UseOracle(connectionString, b => b.MigrationsAssembly("WL.Persistance"));
-         });
+    void ConfigureAppDirectories() {
+      var baseDirectory = GetBaseDirectory();
 
-         //services.Configure<ApiBehaviorOptions>(options => {
-         //  options.SuppressModelStateInvalidFilter = true;
-         //});
+      if (!Directory.Exists(baseDirectory))
+        Directory.CreateDirectory(baseDirectory);
 
-         var containerBuilder = new ContainerBuilder();
-         containerBuilder.RegisterModule<AutofacModule>();
-         containerBuilder.Populate(services);
-         var container = containerBuilder.Build();
-         return new AutofacServiceProvider(container);
-      }
+      var documentDir = GetDocumentsDirectory();
+      var photoDir = GetPhotosDirectory();
+      var thumbnailDir = GetThumbnailsDirectory();
+      var textDir = GetTextDirectory();
 
-      public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
-         if (env.IsDevelopment()) {
-            app.UseDeveloperExceptionPage();
-         }
+      if (!Directory.Exists(documentDir))
+        Directory.CreateDirectory(documentDir);
 
-         app.UseCors(builder => builder
-           .AllowAnyHeader()
-           .AllowAnyMethod()
-           .AllowAnyOrigin()
-         );
+      if (!Directory.Exists(photoDir))
+        Directory.CreateDirectory(photoDir);
 
-         app.UseMvc();
-      }
+      if (!Directory.Exists(thumbnailDir))
+        Directory.CreateDirectory(thumbnailDir);
 
-      void ConfigureAppDirectories() {
-         var baseDirectory = GetBaseDirectory();
-
-         if (!Directory.Exists(baseDirectory))
-            Directory.CreateDirectory(baseDirectory);
-
-         var documentDir = GetDocumentsDirectory();
-         var photoDir = GetPhotosDirectory();
-         var thumbnailDir = GetThumbnailsDirectory();
-         var textDir = GetTextDirectory();
-
-         if (!Directory.Exists(documentDir))
-            Directory.CreateDirectory(documentDir);
-
-         if (!Directory.Exists(photoDir))
-            Directory.CreateDirectory(photoDir);
-
-         if (!Directory.Exists(thumbnailDir))
-            Directory.CreateDirectory(thumbnailDir);
-
-         if (!Directory.Exists(textDir))
-            Directory.CreateDirectory(textDir);
-      }
-   }
+      if (!Directory.Exists(textDir))
+        Directory.CreateDirectory(textDir);
+    }
+  }
 }

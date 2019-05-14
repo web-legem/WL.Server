@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using WL.Application.Common;
 using WL.Application.Documents.Queries;
 using WL.Domain;
 
@@ -17,5 +18,7 @@ namespace WL.Application.Interfaces.Persistance {
       string number,
       long? publicationYear
     );
+
+    PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg);
   }
 }

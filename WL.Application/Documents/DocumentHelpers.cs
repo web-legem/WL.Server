@@ -26,6 +26,14 @@ namespace WL.Application.Documents {
       PublicationDate = document.PublicationDate
     };
 
+    public static DocumentWithoutFileDto ToDocumentWithoutFileDto(this Document document) => new DocumentWithoutFileDto {
+      Id = document.Id,
+      EntityId = document.EntityId,
+      DocumentTypeId = document.DocumentTypeId,
+      Number = document.Number,
+      PublicationYear = document.PublicationYear
+    };
+
     public static DocumentDto ToDocumentDto(this File file) {
       var document = file.Document.ToDocumentDto();
       document.Issue = file.Issue;
