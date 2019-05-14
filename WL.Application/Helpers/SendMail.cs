@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Net.Mail;
 using System.Reflection;
@@ -6,19 +7,14 @@ using System.Text;
 
 namespace WL.Application.Helpers {
 
-   public class SendMail {
-      readonly string address;
-
-      public SendMail(string address) {
-         this.address = address;
-      }
-
-      public bool Send(string to, string subject, string msg) {
+   public static class SendMail {
+           
+      public static bool Send(string to, string subject, string msg) {
          return Send(new string[] { to }, subject, msg);
       }
 
-      public bool Send(string[] to, string subject, string msg) {
-         var cfg = new MailCfg(address);
+      public static bool Send(string[] to, string subject, string msg) {
+         var cfg = MailCfg.GetBaseDirectory();
          try {
             var mail = new MailMessage();
             var SmtpServer = new SmtpClient(cfg.smtpClient);
@@ -74,19 +70,27 @@ namespace WL.Application.Helpers {
    }
 
    public class MailCfg {
-      public string smtpClient;
-      public string from;
-      public int port;
-      public bool ssl;
-      public string password;
-      public string signature;
+      public string smtpClient { get; set; }
+      public string from { get; set; }
+      public int port { get; set; }
+      public bool ssl { get; set; }
+      public string password { get; set; }
 
-      public MailCfg(string address) {
-         smtpClient = "smtp.live.com";
-         from = "andres.9010@hotmail.com";
-         port = 587;
-         ssl = true;
-         password = "homero12996177";
+
+
+      public static MailCfg GetBaseDirectory() {
+         var configuration = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .Build();
+
+         return new MailCfg {
+            smtpClient = configuration["email:smtpClient"],
+            from = configuration["email:user"],
+            password = configuration["email:password"],
+            ssl = Convert.ToBoolean(configuration["email:ssl"]),
+            port = Convert.ToInt32(configuration["email:port"])
+         };
       }
    }
 }

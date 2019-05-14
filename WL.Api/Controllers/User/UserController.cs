@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using static WL.Api.Infrastructure.PermissionsAttribute;
 using WL.Api.Infrastructure;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WL.Api.Controllers {
 
@@ -21,7 +22,6 @@ namespace WL.Api.Controllers {
     readonly SessionQuery sessionQuery;
     readonly UpdateUserCommandHandler updateCommand;
     readonly DeleteUserCommandHandler deleteCommand;
-    readonly IHostingEnvironment _hostingEnvironment;
 
     public UserController(
         CreateUserCommandHandler createCommand,
@@ -30,8 +30,7 @@ namespace WL.Api.Controllers {
         DownloadPhotoQuery getPhotoQuery,
         SessionQuery sessionQuery,
         UpdateUserCommandHandler updateCommand,
-        DeleteUserCommandHandler deleteCommand,
-        IHostingEnvironment environment) {
+        DeleteUserCommandHandler deleteCommand) {
       this.createCommand = createCommand;
       this.getAllQuery = getAllQuery;
       this.getOneQuery = getOneQuery;
@@ -39,7 +38,6 @@ namespace WL.Api.Controllers {
       this.sessionQuery = sessionQuery;
       this.updateCommand = updateCommand;
       this.deleteCommand = deleteCommand;
-      _hostingEnvironment = environment;
     }
 
     [HttpGet("{id}")]
@@ -134,9 +132,9 @@ namespace WL.Api.Controllers {
     }
 
     [HttpGet("RestoreRequest")]
-    public IActionResult RestoreRequest([FromQuery]string email, [FromHeader] string origin) {
-      string address = $"{origin}/ingreso/actualizar-contrasena";
-      return sessionQuery.ExecuteRestorePassword(email, address).Match(
+    public IActionResult RestoreRequest([FromQuery]string email, [FromHeader] string appHost) {         
+         string address = "http://"+$"{appHost}"+"/ingreso/actualizar-contrasena";
+         return sessionQuery.ExecuteRestorePassword(email, address).Match(
          Succ: x => x ? Ok(x) : StatusCode(400, new Exception("INVALID")),
          Fail: ex => StatusCode(500, ex));
     }
