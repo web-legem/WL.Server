@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WL.Application.Documents.Queries {
+﻿namespace WL.Application.Documents.Queries {
 
   public class DocumentsWithoutFilePageMessage {
-    public int? PageSize { get; set; }
-    public int? Page { get; set; }
+
+    // page configuration
+    public long? PageSize { get; set; }
+
+    public long? Page { get; set; }
+
+    // filters
+    public long? PublicationYear { get; set; }
+
+    public string Number { get; set; }
+    public long? EntityId { get; set; }
+    public long? DocumentTypeId { get; set; }
+
+    // order
     public string OrderBy { get; set; }
+
     public bool? Descend { get; set; }
   }
 }

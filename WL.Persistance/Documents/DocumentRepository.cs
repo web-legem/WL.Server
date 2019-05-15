@@ -2,6 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using WL.Application.Common;
 using WL.Application.Documents.Queries;
@@ -192,24 +193,68 @@ namespace WL.Persistance.Documents {
       var page = msg.Page ?? 1;
       var pageSize = msg.PageSize ?? 10;
       var desc = msg.Descend ?? false;
-      var skip = (page - 1) * pageSize;
+      var skip = (int)((page - 1) * pageSize);
       var documentsWithoutFile = context.Documents
         .Include(x => x.File)
         .Include(d => d.Entity)
         .Include(d => d.DocumentType)
         .Where(x => x.File == null);
 
-      IQueryable<Document> query;
+      documentsWithoutFile = msg.DocumentTypeId.HasValue
+        ? (msg.DocumentTypeId.Value > 0
+          ? documentsWithoutFile.Where(d => d.DocumentTypeId == msg.DocumentTypeId.Value)
+          : documentsWithoutFile)
+        : documentsWithoutFile;
+
+      documentsWithoutFile = msg.EntityId.HasValue
+        ? (msg.EntityId.Value > 0
+          ? documentsWithoutFile.Where(d => d.EntityId == msg.EntityId.Value)
+          : documentsWithoutFile)
+        : documentsWithoutFile;
+
+      documentsWithoutFile = msg.Number != null
+        ? documentsWithoutFile.Where(d => d.Number == msg.Number)
+        : documentsWithoutFile;
+
+      documentsWithoutFile = msg.PublicationYear.HasValue
+        ? (msg.PublicationYear.Value > 0
+          ? documentsWithoutFile.Where(d => d.PublicationYear == msg.PublicationYear.Value)
+          : documentsWithoutFile)
+        : documentsWithoutFile;
+
+      IQueryable<Document> pagedQuery;
+
+      // TODO - apply correct lambda to order
+      var keySelector = GetOrderProperty(msg.OrderBy);
       if (desc) {
-        query = documentsWithoutFile.OrderByDescending(d => d.Entity.Name);
+        pagedQuery = documentsWithoutFile.OrderByDescending(keySelector);
       } else {
-        query = documentsWithoutFile.OrderBy(d => d.Entity.Name);
+        pagedQuery = documentsWithoutFile.OrderBy(keySelector);
       }
 
       return new PagedResult<Document> {
         Count = documentsWithoutFile.Count(),
-        Page = query.Skip(skip).Take(pageSize)
+        Page = pagedQuery.Skip(skip).Take((int)pageSize).AsQueryable()
       };
+    }
+
+    private Expression<Func<Document, object>> GetOrderProperty(string orderBy) {
+      switch (orderBy) {
+        case "ENTIDAD":
+          return (Document d) => d.Entity.Name;
+
+        case "TIPO_DOCUMENTO":
+          return (Document d) => d.DocumentType.Name;
+
+        case "NUMERO":
+          return (Document d) => d.Number;
+
+        case "ANIO_PUBLICACION":
+          return (Document d) => d.PublicationYear;
+
+        default:
+          return (Document d) => d.DocumentType.Name;
+      }
     }
 
     public IQueryable<Document> GetAll() => throw new NotImplementedException();

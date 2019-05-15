@@ -23,6 +23,7 @@ namespace WL.Api.Controllers {
     readonly GetOneDocumentQuery getOneQuery;
     readonly GetAllDocumentTypesQuery getDTsQuery;
     readonly GetAllEntitiesQuery getEsQuery;
+    readonly DocumentsWithoutFilePagedQuery withoutFileQuery;
     //readonly SendNotificationCommandHGandler sendNotificationCommand;
 
     public DocumentController(
@@ -32,7 +33,8 @@ namespace WL.Api.Controllers {
       DownloadFileQuery downloadFileQuery,
       GetOneDocumentQuery getOneQuery,
       GetAllDocumentTypesQuery getDTsQuery,
-      GetAllEntitiesQuery getEsQuery
+      GetAllEntitiesQuery getEsQuery,
+      DocumentsWithoutFilePagedQuery withoutFileQuery
       //SendNotificationCommandHGandler sendNotificationCommand) {
       ) {
       _createCommandHandler = createCommandHandler;
@@ -42,6 +44,7 @@ namespace WL.Api.Controllers {
       this.getOneQuery = getOneQuery;
       this.getDTsQuery = getDTsQuery;
       this.getEsQuery = getEsQuery;
+      this.withoutFileQuery = withoutFileQuery;
       //this.sendNotificationCommand = sendNotificationCommand;
     }
 
@@ -143,6 +146,35 @@ namespace WL.Api.Controllers {
             .Match(
                x => Ok(x),
                ex => StatusCode(500, ex));
+    }
+
+    // TODO - Add filters to msg and activate them
+    [HttpGet("no-file")]
+    public IActionResult GetDocumentsWithoutFilePaged(
+      long? page,
+      long? pageSize,
+      long? publicationDate,
+      string number,
+      string orderBy = "DEFAULT",
+      bool descend = false,
+      long? entityId = null,
+      long? documentTypeId = null) {
+      var msg = new DocumentsWithoutFilePageMessage {
+        PageSize = pageSize,
+        Page = page,
+        OrderBy = orderBy,
+        Descend = descend,
+
+        PublicationYear = publicationDate,
+        Number = number,
+        EntityId = entityId,
+        DocumentTypeId = documentTypeId
+      };
+      return withoutFileQuery.Execute(msg)
+        .Match(
+          Succ: x => Ok(x),
+          Fail: ex => StatusCode(500, ex)
+        );
     }
 
     //[HttpPost("notify/{documentId}")]
