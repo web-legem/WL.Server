@@ -9,6 +9,7 @@ using WL.Application.Documents.Queries;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
 using static WL.Persistance.ExceptionsToValidations.ExceptionsToValidations;
+using static WL.Persistance.Helpers.DbHelpers;
 
 namespace WL.Persistance.Documents {
 
@@ -255,6 +256,28 @@ namespace WL.Persistance.Documents {
         default:
           return (Document d) => d.DocumentType.Name;
       }
+    }
+
+    public void DeleteFile(File file) {
+      context.Files.Remove(file);
+      context.SaveChanges();
+    }
+
+    public Document UpdateDocumentFile(long documentId, string fileName, string issue) {
+      try {
+        var file = new File { DocumentId = documentId, Name = fileName, Issue = issue };
+        context.Files.Add(file);
+        context.SaveChanges();
+        return NullVerifier(() => context.Documents
+          .Include(d => d.File)
+          .FirstOrDefault(d => d.Id == documentId));
+      } catch (Exception e) {
+        throw WrapOracleException(e);
+      }
+    }
+
+    public File GetFileIfExist(long documentId) {
+      return context.Files.FirstOrDefault(f => f.DocumentId == documentId);
     }
 
     public IQueryable<Document> GetAll() => throw new NotImplementedException();

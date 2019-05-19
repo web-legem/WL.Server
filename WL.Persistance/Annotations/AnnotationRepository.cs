@@ -47,7 +47,8 @@ namespace WL.Persistance.Annotations {
               DocumentTypeId = cmd.ToDocumentTypeId,
               EntityId = cmd.ToEntityId,
               Number = cmd.ToNumber,
-              PublicationYear = cmd.ToPublicationYear
+              PublicationYear = cmd.ToPublicationYear,
+              PublicationDate = cmd.ToPublicationDate
             };
             context.Documents.Add(to);
             context.SaveChanges();

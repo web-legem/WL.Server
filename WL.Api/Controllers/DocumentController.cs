@@ -24,6 +24,7 @@ namespace WL.Api.Controllers {
     readonly GetAllDocumentTypesQuery getDTsQuery;
     readonly GetAllEntitiesQuery getEsQuery;
     readonly DocumentsWithoutFilePagedQuery withoutFileQuery;
+    readonly UpdateFileToDocumentCommandHandler updateFileCommandHandler;
     //readonly SendNotificationCommandHGandler sendNotificationCommand;
 
     public DocumentController(
@@ -34,7 +35,8 @@ namespace WL.Api.Controllers {
       GetOneDocumentQuery getOneQuery,
       GetAllDocumentTypesQuery getDTsQuery,
       GetAllEntitiesQuery getEsQuery,
-      DocumentsWithoutFilePagedQuery withoutFileQuery
+      DocumentsWithoutFilePagedQuery withoutFileQuery,
+      UpdateFileToDocumentCommandHandler updateFileCommandHandler
       //SendNotificationCommandHGandler sendNotificationCommand) {
       ) {
       _createCommandHandler = createCommandHandler;
@@ -45,6 +47,7 @@ namespace WL.Api.Controllers {
       this.getDTsQuery = getDTsQuery;
       this.getEsQuery = getEsQuery;
       this.withoutFileQuery = withoutFileQuery;
+      this.updateFileCommandHandler = updateFileCommandHandler;
       //this.sendNotificationCommand = sendNotificationCommand;
     }
 
@@ -61,6 +64,26 @@ namespace WL.Api.Controllers {
       }
 
       return _createCommandHandler.Execute(value)
+         .Match(x => x.Match<IActionResult>(Ok, BadRequest),
+            ex => StatusCode(500, ex));
+    }
+
+    [HttpPost("file/{documentId}")]
+    public IActionResult UpdateFile(
+        long documentId,
+       IList<IFormFile> files) {
+      Stream stream = null;
+      var command = new UpdateFileToDocumentCommand {
+        DocumentId = documentId,
+      };
+
+      if (files != null && files.Length() > 0) {
+        var file = files[0];
+        stream = file.OpenReadStream();
+        command.File = stream;
+      }
+
+      return updateFileCommandHandler.Execute(command)
          .Match(x => x.Match<IActionResult>(Ok, BadRequest),
             ex => StatusCode(500, ex));
     }

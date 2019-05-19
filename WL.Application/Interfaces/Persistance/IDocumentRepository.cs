@@ -20,5 +20,11 @@ namespace WL.Application.Interfaces.Persistance {
     );
 
     PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg);
+
+    void DeleteFile(File file);
+
+    File GetFileIfExist(long documentId);
+
+    Document UpdateDocumentFile(long documentId, string fileName, string issue);
   }
 }

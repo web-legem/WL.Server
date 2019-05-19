@@ -26,6 +26,19 @@ namespace WL.Application.Documents {
             => document)
       select y;
 
+    public static Validation<Error, UpdateFileToDocumentCommand>
+      ValidateFile(UpdateFileToDocumentCommand file)
+      => from x in ValidateFieldNonNull(file, nameof(file))
+         from y in (
+            ValidateDocumentId(file.DocumentId),
+            ValidateFile(file.File)
+           ).Apply((id, stream) => file)
+         select y;
+
+    public static Validation<Error, long> ValidateDocumentId(long documentId)
+      => from x in ValidateId(documentId, nameof(documentId))
+         select x;
+
     public static Validation<Error, long> ValidateEntityId(long entityId)
        => from x in ValidateId(entityId, nameof(entityId))
           select x;

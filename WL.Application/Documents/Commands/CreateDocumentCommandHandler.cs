@@ -54,15 +54,17 @@ namespace WL.Application.Documents.Commands {
     }
 
     Try<FileInfo> SaveFile(Stream stream) {
-      var fileInfo = new FileInfo(Path.Combine(GetDocumentsDirectory(), Path.GetRandomFileName() + ".pdf"));
+      return () => {
+        var fileInfo = new FileInfo(Path.Combine(GetDocumentsDirectory(), Path.GetRandomFileName() + ".pdf"));
 
-      if (fileInfo.Exists)
-        fileInfo.Delete();
+        if (fileInfo.Exists)
+          fileInfo.Delete();
 
-      using (var output = new FileStream(fileInfo.FullName, FileMode.Create))
-        stream.CopyTo(output);
+        using (var output = new FileStream(fileInfo.FullName, FileMode.Create))
+          stream.CopyTo(output);
 
-      return () => fileInfo;
+        return fileInfo;
+      };
     }
   }
 }
