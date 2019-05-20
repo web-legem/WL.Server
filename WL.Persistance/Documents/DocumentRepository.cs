@@ -197,8 +197,6 @@ namespace WL.Persistance.Documents {
       var skip = (int)((page - 1) * pageSize);
       var documentsWithoutFile = context.Documents
         .Include(x => x.File)
-        .Include(d => d.Entity)
-        .Include(d => d.DocumentType)
         .Where(x => x.File == null);
 
       documentsWithoutFile = msg.DocumentTypeId.HasValue
