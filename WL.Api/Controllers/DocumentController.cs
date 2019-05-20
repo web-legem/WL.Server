@@ -25,6 +25,7 @@ namespace WL.Api.Controllers {
     readonly GetAllEntitiesQuery getEsQuery;
     readonly DocumentsWithoutFilePagedQuery withoutFileQuery;
     readonly UpdateFileToDocumentCommandHandler updateFileCommandHandler;
+    readonly DeleteDocumentCommandHandler deleteDocumentCommand;
     //readonly SendNotificationCommandHGandler sendNotificationCommand;
 
     public DocumentController(
@@ -36,7 +37,8 @@ namespace WL.Api.Controllers {
       GetAllDocumentTypesQuery getDTsQuery,
       GetAllEntitiesQuery getEsQuery,
       DocumentsWithoutFilePagedQuery withoutFileQuery,
-      UpdateFileToDocumentCommandHandler updateFileCommandHandler
+      UpdateFileToDocumentCommandHandler updateFileCommandHandler,
+      DeleteDocumentCommandHandler deleteDocumentCommand
       //SendNotificationCommandHGandler sendNotificationCommand) {
       ) {
       _createCommandHandler = createCommandHandler;
@@ -48,6 +50,7 @@ namespace WL.Api.Controllers {
       this.getEsQuery = getEsQuery;
       this.withoutFileQuery = withoutFileQuery;
       this.updateFileCommandHandler = updateFileCommandHandler;
+      this.deleteDocumentCommand = deleteDocumentCommand;
       //this.sendNotificationCommand = sendNotificationCommand;
     }
 
@@ -199,6 +202,14 @@ namespace WL.Api.Controllers {
           Fail: ex => StatusCode(500, ex)
         );
     }
+
+    [HttpDelete("{documentId}")]
+    public IActionResult DeleteDocument(long documentId)
+      => deleteDocumentCommand
+        .Execute(documentId)
+        .Match(
+         Succ: _ => Ok() as IActionResult,
+         Fail: err => StatusCode(500, err));
 
     //[HttpPost("notify/{documentId}")]
     //public IActionResult Notify([FromBody] string[] emails, long documentId)

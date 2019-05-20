@@ -239,6 +239,14 @@ namespace WL.Persistance.Documents {
       };
     }
 
+    public void Delete(long id) {
+      var document = context.Documents.FirstOrDefault(d => d.Id == id);
+      if (document != null) {
+        context.Documents.Remove(document);
+        context.SaveChanges();
+      }
+    }
+
     private Expression<Func<Document, object>> GetOrderProperty(string orderBy) {
       switch (orderBy) {
         case "ENTIDAD":
@@ -285,7 +293,5 @@ namespace WL.Persistance.Documents {
     public Document Create(Document entity) => throw new NotImplementedException();
 
     public Document Update(Document entity) => throw new NotImplementedException();
-
-    public void Delete(long id) => throw new NotImplementedException();
   }
 }
