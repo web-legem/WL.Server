@@ -3,8 +3,10 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using WL.Application.Common;
+using WL.Application.Documents;
 using WL.Application.Documents.Queries;
 using WL.Application.Interfaces.Persistance;
 using WL.Domain;
@@ -61,7 +63,7 @@ namespace WL.Persistance.Documents {
       return file;
     }
 
-    public IQueryable<Document> Search(
+    public IQueryable<AnnotatedDocument> Search(
       SearchDocumentsMessage msg
       ) {
       var pagePrm = new OracleParameter(
@@ -115,7 +117,6 @@ namespace WL.Persistance.Documents {
 
       return context.Documents
         .Include(d => d.File)
-
         .FromSql("SELECT * FROM TABLE(search_dt(:page, :page_size, :words_to_search, :entity, :document_type, :doc_number, :pub_year, :order_by, :descend))",
           pagePrm,
           pageSizePrm,
@@ -126,6 +127,19 @@ namespace WL.Persistance.Documents {
           publicationYearPrm,
           orderByPrm,
           descendPrm
+          ).Select(d =>
+            new AnnotatedDocument {
+              Id = d.Id,
+              DocumentTypeId = d.DocumentTypeId,
+              EntityId = d.EntityId,
+              Number = d.Number,
+              PublicationDate = d.PublicationDate,
+              PublicationYear = d.PublicationYear,
+              IsAnnotated = context.Annotations.Where(a => a.To.Id == d.Id).Any(),
+              FileId = d.File.DocumentId,
+              FileName = d.File.Name,
+              Issue = d.File.Issue
+            }
           );
     }
 
@@ -271,6 +285,11 @@ namespace WL.Persistance.Documents {
 
     public Document UpdateDocumentFile(long documentId, string fileName, string issue) {
       try {
+        var oldFile = context.Files.FirstOrDefault(f => f.DocumentId == documentId);
+        if (oldFile != null) {
+          context.Files.Remove(oldFile);
+          context.SaveChanges();
+        }
         var file = new File { DocumentId = documentId, Name = fileName, Issue = issue };
         context.Files.Add(file);
         context.SaveChanges();
@@ -282,8 +301,20 @@ namespace WL.Persistance.Documents {
       }
     }
 
+    public bool IsAnnotated(long documentId) {
+      return context.Annotations
+        .Where(a => a.To.Id == documentId)
+        .Any();
+    }
+
     public File GetFileIfExist(long documentId) {
       return context.Files.FirstOrDefault(f => f.DocumentId == documentId);
+    }
+
+    public Document GetIncludingRelationsById(long id) {
+      return context.Documents
+        .Include(x => x.DocumentType)
+        .FirstOrDefault(x => x.Id == id);
     }
 
     public IQueryable<Document> GetAll() => throw new NotImplementedException();

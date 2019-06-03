@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using WL.Application.Common;
+using WL.Application.Documents;
 using WL.Application.Documents.Queries;
 using WL.Domain;
 
@@ -9,7 +10,7 @@ namespace WL.Application.Interfaces.Persistance {
 
     File CreateClassifiedDocument(Document document, string Issue, string fileName);
 
-    IQueryable<Document> Search(SearchDocumentsMessage msg);
+    IQueryable<AnnotatedDocument> Search(SearchDocumentsMessage msg);
 
     long? SearchCount(
       string wordsToSearch,
@@ -18,6 +19,8 @@ namespace WL.Application.Interfaces.Persistance {
       string number,
       long? publicationYear
     );
+
+    Document GetIncludingRelationsById(long id);
 
     PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg);
 

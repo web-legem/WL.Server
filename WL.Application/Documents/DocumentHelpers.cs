@@ -52,7 +52,7 @@ namespace WL.Application.Documents {
         PublicationDate = document.PublicationDate,
         FileId = document.File?.DocumentId,
         Issue = document.File?.Issue,
-        FileName = document.File?.Name
+        FileName = document.File?.Name,
       };
     }
   }
