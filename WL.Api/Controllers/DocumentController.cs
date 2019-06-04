@@ -26,6 +26,7 @@ namespace WL.Api.Controllers {
     readonly DocumentsWithoutFilePagedQuery withoutFileQuery;
     readonly UpdateFileToDocumentCommandHandler updateFileCommandHandler;
     readonly DeleteDocumentCommandHandler deleteDocumentCommand;
+    readonly SendDocumentNotificationCommandHandler sendDocumentNotificationCommandHandler;
     //readonly SendNotificationCommandHGandler sendNotificationCommand;
 
     public DocumentController(
@@ -38,7 +39,8 @@ namespace WL.Api.Controllers {
       GetAllEntitiesQuery getEsQuery,
       DocumentsWithoutFilePagedQuery withoutFileQuery,
       UpdateFileToDocumentCommandHandler updateFileCommandHandler,
-      DeleteDocumentCommandHandler deleteDocumentCommand
+      DeleteDocumentCommandHandler deleteDocumentCommand,
+      SendDocumentNotificationCommandHandler sendDocmentNotificationCommandHandler
       //SendNotificationCommandHGandler sendNotificationCommand) {
       ) {
       _createCommandHandler = createCommandHandler;
@@ -51,7 +53,14 @@ namespace WL.Api.Controllers {
       this.withoutFileQuery = withoutFileQuery;
       this.updateFileCommandHandler = updateFileCommandHandler;
       this.deleteDocumentCommand = deleteDocumentCommand;
+      this.sendDocumentNotificationCommandHandler = sendDocmentNotificationCommandHandler;
       //this.sendNotificationCommand = sendNotificationCommand;
+    }
+
+    [HttpPost("notify")]
+    public IActionResult SendDocumentNotification([FromBody] SendDocumentNotificationCommand cmd) {
+      sendDocumentNotificationCommandHandler.Execute(cmd);
+      return Ok();
     }
 
     [HttpPost]

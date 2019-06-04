@@ -14,11 +14,9 @@ namespace WL.Application.Documents.Queries {
       this.repository = repository;
     }
 
-    public Try<IQueryable<DocumentFileDto>> Execute(SearchDocumentsMessage msg) {
-      Func<IQueryable<DocumentFileDto>> query = () =>
-        repository.Search(msg).Select(x =>
-            x.ToDocumentFileDto()
-          );
+    public Try<IQueryable<AnnotatedDocument>> Execute(SearchDocumentsMessage msg) {
+      Func<IQueryable<AnnotatedDocument>> query = () =>
+        repository.Search(msg);
 
       return Try(query);
     }
