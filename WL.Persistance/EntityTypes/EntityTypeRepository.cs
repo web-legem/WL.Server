@@ -19,7 +19,6 @@ namespace WL.Persistance.EntityTypes {
       public EntityType Get(long id) {
          try {
             return NullVerifier(() => context.EntityTypes
-           .AsNoTracking()
            .Include(et => et.SupportedDocuments)
            .ThenInclude(sd => sd.DocumentType)
            .First(et => et.Id == id));
@@ -34,7 +33,8 @@ namespace WL.Persistance.EntityTypes {
             return context.EntityTypes
            .AsNoTracking()
            .Include(et => et.SupportedDocuments)
-           .ThenInclude(sd => sd.DocumentType);
+           .ThenInclude(sd => sd.DocumentType)
+           .OrderBy(x => x.Name);
          }
          catch (Exception e) {
             throw WrapOracleException(e);

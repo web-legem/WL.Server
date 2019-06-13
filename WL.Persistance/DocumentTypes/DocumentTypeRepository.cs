@@ -25,7 +25,7 @@ namespace WL.Persistance.DocumentTypes {
 
       public IQueryable<DocumentType> GetAll() {
          try {
-            return context.DocumentTypes;
+            return context.DocumentTypes.OrderBy(x => x.Name);
          }
          catch (Exception e) {
             throw WrapOracleException(e);

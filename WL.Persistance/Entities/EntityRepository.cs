@@ -24,7 +24,7 @@ namespace WL.Persistance.Entities {
 
     public IQueryable<Entity> GetAll() {
       try {
-        return context.Entities;
+        return context.Entities.OrderBy(x => x.Name);
       } catch (Exception e) {
         throw WrapOracleException(e);
       }

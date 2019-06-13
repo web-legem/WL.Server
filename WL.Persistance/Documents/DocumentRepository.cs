@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -312,9 +313,12 @@ namespace WL.Persistance.Documents {
     }
 
     public Document GetIncludingRelationsById(long id) {
-      return context.Documents
-        .Include(x => x.DocumentType)
-        .FirstOrDefault(x => x.Id == id);
+         Document document = context.Documents       
+            .FirstOrDefault(x => x.Id == id);
+         DocumentType documentType = context.DocumentTypes
+            .FirstOrDefault(x => x.Id == document.DocumentTypeId);
+         document.DocumentType = documentType;
+         return document;
     }
 
     public IQueryable<Document> GetAll() => throw new NotImplementedException();
