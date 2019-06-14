@@ -4,6 +4,7 @@ using WL.Api.Infrastructure;
 using WL.Application.Annotations.Commands;
 using WL.Application.Annotations.Queries;
 using WL.Application.AnnotationTypes.Queries;
+using WL.Application.Documents.Queries;
 using WL.Application.DocumentTypes.Queries;
 using WL.Application.Entities.Queries;
 using static WL.Api.Infrastructure.PermissionsAttribute;
@@ -20,6 +21,8 @@ namespace WL.Api.Controllers {
     readonly GetAllDocumentTypesQuery getDTsQuery;
     readonly GetAllEntitiesQuery getEsQuery;
     readonly GetAllAnnotationTypesQuery getAATsQuery;
+    readonly SearchDocumentsToAnnotateCountQuery searchCountQuery;
+    readonly SearchDocumentsToAnnotateQuery searchQuery;
 
     public AnnotationController(
       CreateAnnotationCommandHandler createCommand,
@@ -27,13 +30,18 @@ namespace WL.Api.Controllers {
       GetDocumentAnnotationsQuery documentAnnotationsQuery,
       GetAllDocumentTypesQuery getDTsQuery,
       GetAllEntitiesQuery getEsQuery,
-      GetAllAnnotationTypesQuery getAATsQuery) {
+      GetAllAnnotationTypesQuery getAATsQuery,
+      SearchDocumentsToAnnotateCountQuery searchCountQuery,
+      SearchDocumentsToAnnotateQuery searchQuery
+      ) {
       this.createCommand = createCommand;
       this.deleteCommand = deleteCommand;
       this.documentAnnotationsQuery = documentAnnotationsQuery;
       this.getDTsQuery = getDTsQuery;
       this.getEsQuery = getEsQuery;
       this.getAATsQuery = getAATsQuery;
+      this.searchCountQuery = searchCountQuery;
+      this.searchQuery = searchQuery;
     }
 
     [HttpPost]
@@ -96,6 +104,64 @@ namespace WL.Api.Controllers {
             .Match(
                x => Ok(x),
                ex => StatusCode(500, ex));
+    }
+
+    [HttpGet("count")]
+    public IActionResult searchCount(
+      [FromQuery] string wordsToSearch,
+      [FromQuery] long? publicationDate,
+      [FromQuery] string number,
+      [FromHeader(Name = "Authorization")] string token,
+      [FromQuery] long? entityId = null,
+      [FromQuery] long? documentTypeId = null
+    ) {
+      return searchCountQuery.Execute(
+          new SearchDocumentsMessage {
+            WordsToSearch = wordsToSearch,
+            Year = publicationDate,
+            Number = number,
+            EntityId = entityId,
+            DocumentTypeId = documentTypeId
+          },
+          token
+        )
+        .Match(
+          x =>
+            Ok(x),
+          ex => StatusCode(500, ex));
+    }
+
+    //documentos
+    [HttpGet("search")]
+    public IActionResult searchDocuments(
+      [FromHeader(Name = "Authorization")] string token,
+      [FromQuery(Name = "page")] long? page,
+      [FromQuery(Name = "pageSize")] long? pageSize,
+      [FromQuery] string wordsToSearch,
+      [FromQuery] long? publicationDate,
+      [FromQuery] string number,
+      [FromQuery] string orderBy = "DEFAULT",
+      [FromQuery] bool descend = false,
+      [FromQuery] long? entityId = null,
+      [FromQuery] long? documentTypeId = null) {
+      return searchQuery.Execute(
+          new SearchDocumentsMessage {
+            Page = page,
+            PageSize = pageSize,
+            WordsToSearch = wordsToSearch,
+            Year = publicationDate,
+            Number = number,
+            OrderBy = orderBy,
+            Descend = descend,
+            EntityId = entityId,
+            DocumentTypeId = documentTypeId
+          },
+          token
+        )
+        .Match(
+          x =>
+            Ok(x),
+          ex => StatusCode(500, ex));
     }
   }
 }

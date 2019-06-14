@@ -41,5 +41,9 @@ namespace WL.Application.Users {
     public static Validation<Error, long> ValidateRoleId(long val)
     => from y in ValidateMinValue(1)(val)
        select y;
+
+    public static Validation<Error, long?> ValidateEntityId(long? val)
+    => from y in ValidateMinValue((long?)1L)(val)
+       select y;
   }
 }

@@ -20,9 +20,20 @@ namespace WL.Application.Interfaces.Persistance {
       long? publicationYear
     );
 
+    IQueryable<AnnotatedDocument> SearchToAnnotate(SearchDocumentsMessage msg, string token);
+
+    long? SearchCountToAnnotate(
+      string wordsToSearch,
+      long? entityId,
+      long? documentTypeid,
+      string number,
+      long? publicationYear,
+      string token
+    );
+
     Document GetIncludingRelationsById(long id);
 
-    PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg);
+    PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg, string token);
 
     void DeleteFile(File file);
 

@@ -54,9 +54,10 @@ namespace WL.Application.Users.Commands {
                 ValidateDocument(x.Document),
                 ValidateNickname(x.Nickname),
                 validatePassword(x.Email),
-                ValidateRoleId(x.RoleId)
+                ValidateRoleId(x.RoleId),
+                ValidateEntityId(x.EntityId)
              )
-             .Apply((X1, X2, X3, X4, X5, X6) => msg)
+             .Apply((X1, X2, X3, X4, X5, X6, x7) => msg)
           select y;
   }
 }

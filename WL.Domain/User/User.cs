@@ -34,5 +34,8 @@ namespace WL.Domain.User {
     public Role Role { get; set; }
 
     public Credential Credential { get; set; }
+
+    public long? EntityId { get; set; }
+    public Entity Entity { get; set; }
   }
 }

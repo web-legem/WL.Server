@@ -63,6 +63,101 @@ namespace WL.Persistance.Documents {
       return file;
     }
 
+    public IQueryable<AnnotatedDocument> SearchToAnnotate(
+      SearchDocumentsMessage msg,
+      string token
+      ) {
+      var pagePrm = new OracleParameter(
+        "page", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+        Value = msg.Page.HasValue ? msg.Page.Value : (object)null
+      };
+
+      var pageSizePrm = new OracleParameter(
+        "page_size", OracleDbType.Int64, System.Data.ParameterDirection.Input);
+      pageSizePrm.Value = msg.PageSize.HasValue ? msg.PageSize.Value : (object)null;
+
+      msg.WordsToSearch = msg.WordsToSearch ?? "";
+      var wordsToSearchOracleFormatForMultipleWords = Regex.Replace(msg.WordsToSearch, @"\s+", " ");
+      wordsToSearchOracleFormatForMultipleWords = wordsToSearchOracleFormatForMultipleWords.Trim();
+      wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearchOracleFormatForMultipleWords, @"\s+", ",");
+
+      var wordsToSearchPrm = new OracleParameter(
+        "words_to_search", OracleDbType.Varchar2, System.Data.ParameterDirection.Input) {
+        Value = wordsToSearchOracleFormatForMultipleWords
+      };
+
+      var entity = context.Credentials
+        .Where(c => c.Token == token)
+        .Select(c => c.User.Entity);
+
+      OracleParameter entityIdPrm;
+      var userEntity = entity.FirstOrDefault();
+
+      if (userEntity == null) {
+        entityIdPrm = new OracleParameter(
+          "entity", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+          Value = msg.EntityId.HasValue ? msg.EntityId.Value : (object)null
+        };
+      } else {
+        entityIdPrm = new OracleParameter(
+          "entity", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+          Value = userEntity.Id
+        };
+      }
+
+      var documentTypeIdPrm = new OracleParameter(
+        "document_type", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+        Value = msg.DocumentTypeId.HasValue ? msg.DocumentTypeId.Value : (object)null
+      };
+
+      var numberPrm = new OracleParameter(
+        "doc_number", OracleDbType.Varchar2, System.Data.ParameterDirection.Input) {
+        Value = msg.Number
+      };
+
+      var publicationYearPrm = new OracleParameter(
+        "pub_year", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+        Value = msg.Year.HasValue ? msg.Year.Value : (object)null
+      };
+
+      var orderByPrm = new OracleParameter(
+        "order_by", OracleDbType.Varchar2, System.Data.ParameterDirection.Input) {
+        Value = msg.OrderBy
+      };
+
+      var descendPrm = new OracleParameter(
+        "descend", OracleDbType.Boolean, System.Data.ParameterDirection.Input) {
+        Value = msg.Descend
+      };
+
+      return context.Documents
+        .Include(d => d.File)
+        .FromSql("SELECT * FROM TABLE(search_dt(:page, :page_size, :words_to_search, :entity, :document_type, :doc_number, :pub_year, :order_by, :descend))",
+          pagePrm,
+          pageSizePrm,
+          wordsToSearchPrm,
+          entityIdPrm,
+          documentTypeIdPrm,
+          numberPrm,
+          publicationYearPrm,
+          orderByPrm,
+          descendPrm
+          ).Select(d =>
+            new AnnotatedDocument {
+              Id = d.Id,
+              DocumentTypeId = d.DocumentTypeId,
+              EntityId = d.EntityId,
+              Number = d.Number,
+              PublicationDate = d.PublicationDate,
+              PublicationYear = d.PublicationYear,
+              IsAnnotated = context.Annotations.Where(a => a.To.Id == d.Id).Any(),
+              FileId = d.File.DocumentId,
+              FileName = d.File.Name,
+              Issue = d.File.Issue
+            }
+          );
+    }
+
     public IQueryable<AnnotatedDocument> Search(
       SearchDocumentsMessage msg
       ) {
@@ -194,6 +289,74 @@ namespace WL.Persistance.Documents {
       }
     }
 
+    public long? SearchCountToAnnotate(
+      string wordsToSearch,
+      long? entityId,
+      long? documentTypeId,
+      string number,
+      long? publicationYear,
+      string token) {
+      var res = new OracleParameter {
+        Direction = System.Data.ParameterDirection.ReturnValue,
+        OracleDbType = OracleDbType.Int64
+      };
+
+      wordsToSearch = wordsToSearch ?? "";
+      var wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearch, @"\s+", " ");
+      wordsToSearchOracleFormatForMultipleWords = wordsToSearchOracleFormatForMultipleWords.Trim();
+      wordsToSearchOracleFormatForMultipleWords = Regex.Replace(wordsToSearchOracleFormatForMultipleWords, @"\s+", ",");
+
+      var words = new OracleParameter("words_to_search", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+      words.Value = wordsToSearchOracleFormatForMultipleWords;
+
+      var entity = context.Credentials
+        .Where(c => c.Token == token)
+        .Select(c => c.User.Entity);
+
+      OracleParameter entityIdPrm;
+      var userEntity = entity.FirstOrDefault();
+
+      if (userEntity == null) {
+        entityIdPrm = new OracleParameter(
+          "entity", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+          Value = entityId.HasValue ? entityId.Value : (object)null
+        };
+      } else {
+        entityIdPrm = new OracleParameter(
+          "entity", OracleDbType.Int64, System.Data.ParameterDirection.Input) {
+          Value = userEntity.Id
+        };
+      }
+
+      var documentType = new OracleParameter("document_type", OracleDbType.Int64, System.Data.ParameterDirection.Input);
+      documentType.Value = documentTypeId.HasValue ? documentTypeId.Value : (object)null;
+
+      var docNumber = new OracleParameter("doc_number", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+      docNumber.Value = number;
+
+      var pubYear = new OracleParameter("pub_year", OracleDbType.Int64, System.Data.ParameterDirection.Input);
+      pubYear.Value = publicationYear.HasValue ? publicationYear.Value : (object)null;
+
+      using (var connection = context.Database.GetDbConnection() as OracleConnection) {
+        connection.Open();
+        using (var command = new OracleCommand("SEARCH_COUNT", connection)) {
+          command.CommandType = System.Data.CommandType.StoredProcedure;
+          command.BindByName = true;
+          command.Parameters.Add(res);
+          command.Parameters.Add(words);
+          command.Parameters.Add(entityIdPrm);
+          command.Parameters.Add(documentType);
+          command.Parameters.Add(docNumber);
+          command.Parameters.Add(pubYear);
+          command.ExecuteNonQuery();
+
+          if (long.TryParse(res.Value.ToString(), out var result))
+            return result;
+          return null;
+        }
+      }
+    }
+
     public Document Get(long id) {
       try {
         return context.Documents
@@ -204,11 +367,16 @@ namespace WL.Persistance.Documents {
       }
     }
 
-    public PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg) {
+    public PagedResult<Document> GetPageOfDocumentsWithoutFile(DocumentsWithoutFilePageMessage msg, string token) {
       var page = msg.Page ?? 1;
       var pageSize = msg.PageSize ?? 10;
       var desc = msg.Descend ?? false;
       var skip = (int)((page - 1) * pageSize);
+
+      var entity = context.Credentials
+        .Where(c => c.Token == token)
+        .Select(c => c.User.Entity);
+
       var documentsWithoutFile = context.Documents
         .Include(x => x.File)
         .Where(x => x.File == null);
@@ -219,11 +387,16 @@ namespace WL.Persistance.Documents {
           : documentsWithoutFile)
         : documentsWithoutFile;
 
-      documentsWithoutFile = msg.EntityId.HasValue
-        ? (msg.EntityId.Value > 0
-          ? documentsWithoutFile.Where(d => d.EntityId == msg.EntityId.Value)
-          : documentsWithoutFile)
-        : documentsWithoutFile;
+      var entityDomain = entity.FirstOrDefault();
+      if (entityDomain == null) {
+        documentsWithoutFile = msg.EntityId.HasValue
+          ? (msg.EntityId.Value > 0
+            ? documentsWithoutFile.Where(d => d.EntityId == msg.EntityId.Value)
+            : documentsWithoutFile)
+          : documentsWithoutFile;
+      } else {
+        documentsWithoutFile = documentsWithoutFile.Where(d => d.EntityId == entityDomain.Id);
+      }
 
       documentsWithoutFile = msg.Number != null
         ? documentsWithoutFile.Where(d => d.Number == msg.Number)
@@ -237,7 +410,6 @@ namespace WL.Persistance.Documents {
 
       IQueryable<Document> pagedQuery;
 
-      // TODO - apply correct lambda to order
       var keySelector = GetOrderProperty(msg.OrderBy);
       if (desc) {
         pagedQuery = documentsWithoutFile.OrderByDescending(keySelector);

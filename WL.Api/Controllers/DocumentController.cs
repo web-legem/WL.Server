@@ -23,6 +23,7 @@ namespace WL.Api.Controllers {
     readonly GetOneDocumentQuery getOneQuery;
     readonly GetAllDocumentTypesQuery getDTsQuery;
     readonly GetAllEntitiesQuery getEsQuery;
+    readonly GetAllDocumentTypesByUserQuery getDTByUserQuery;
     readonly DocumentsWithoutFilePagedQuery withoutFileQuery;
     readonly UpdateFileToDocumentCommandHandler updateFileCommandHandler;
     readonly DeleteDocumentCommandHandler deleteDocumentCommand;
@@ -37,6 +38,7 @@ namespace WL.Api.Controllers {
       GetOneDocumentQuery getOneQuery,
       GetAllDocumentTypesQuery getDTsQuery,
       GetAllEntitiesQuery getEsQuery,
+      GetAllDocumentTypesByUserQuery getDTByUserQuery,
       DocumentsWithoutFilePagedQuery withoutFileQuery,
       UpdateFileToDocumentCommandHandler updateFileCommandHandler,
       DeleteDocumentCommandHandler deleteDocumentCommand,
@@ -54,6 +56,7 @@ namespace WL.Api.Controllers {
       this.updateFileCommandHandler = updateFileCommandHandler;
       this.deleteDocumentCommand = deleteDocumentCommand;
       this.sendDocumentNotificationCommandHandler = sendDocmentNotificationCommandHandler;
+      this.getDTByUserQuery = getDTByUserQuery;
       //this.sendNotificationCommand = sendNotificationCommand;
     }
 
@@ -166,7 +169,7 @@ namespace WL.Api.Controllers {
     }
 
     [HttpGet("entities")]
-    public IActionResult GetEntities() {
+    public IActionResult GetEntities([FromHeader(Name = "Authorization")] string Token) {
       return getEsQuery
             .Execute()
             .Match(
@@ -175,17 +178,17 @@ namespace WL.Api.Controllers {
     }
 
     [HttpGet("documentTypes")]
-    public IActionResult GetDocumentTypes() {
-      return getDTsQuery
-            .Execute()
+    public IActionResult GetDocumentTypes([FromHeader(Name = "Authorization")] string credentialToken) {
+      return getDTByUserQuery
+            .Execute(credentialToken)
             .Match(
                x => Ok(x),
                ex => StatusCode(500, ex));
     }
 
-    // TODO - Add filters to msg and activate them
     [HttpGet("no-file")]
     public IActionResult GetDocumentsWithoutFilePaged(
+      [FromHeader(Name = "Authorization")] string token,
       long? page,
       long? pageSize,
       long? publicationDate,
@@ -193,7 +196,8 @@ namespace WL.Api.Controllers {
       string orderBy = "DEFAULT",
       bool descend = false,
       long? entityId = null,
-      long? documentTypeId = null) {
+      long? documentTypeId = null
+      ) {
       var msg = new DocumentsWithoutFilePageMessage {
         PageSize = pageSize,
         Page = page,
@@ -205,7 +209,7 @@ namespace WL.Api.Controllers {
         EntityId = entityId,
         DocumentTypeId = documentTypeId
       };
-      return withoutFileQuery.Execute(msg)
+      return withoutFileQuery.Execute(msg, token)
         .Match(
           Succ: x => Ok(x),
           Fail: ex => StatusCode(500, ex)

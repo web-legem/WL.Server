@@ -13,5 +13,6 @@ namespace WL.Application.Users {
     public long RoleId { get; set; }
     public string State { get; set; }
     public DateTime LastModification { get; set; }
+    public long? EntityId { get; set; }
   }
 }
