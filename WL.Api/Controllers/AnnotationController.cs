@@ -106,7 +106,7 @@ namespace WL.Api.Controllers {
                ex => StatusCode(500, ex));
     }
 
-    [HttpGet("count")]
+    [HttpGet("search/count")]
     public IActionResult searchCount(
       [FromQuery] string wordsToSearch,
       [FromQuery] long? publicationDate,
