@@ -82,13 +82,15 @@ namespace WL.Persistance.Annotations {
     public void Delete(long id) {
       try {
         context.Database.BeginTransaction();
-        var original = NullVerifier(() => context.Annotations
-          .Include(a => a.To)
-          .ThenInclude(d => d.File)
+        var annotation = NullVerifier(() => context.Annotations          
           .FirstOrDefault(a => a.Id == id));
 
-        var documentDestiny = original.To;
-        context.Annotations.Remove(original);
+        var documentDestiny = context.Annotations
+               .Where(a => a.Id == id)
+               .Select(a => a.To)
+               .FirstOrDefault();
+
+        context.Annotations.Remove(annotation);
         context.SaveChanges();
 
         if (HasNoFile(documentDestiny) && HasNoAnnotationsInWhichIsDestiny(documentDestiny)) {

@@ -39,6 +39,15 @@ namespace WL.Persistance.DocumentTypes {
         throw WrapOracleException(e);
       }
     }
+    
+    public IQueryable<DocumentType> GetAll() {
+       try {
+         return context.DocumentTypes.OrderBy(x => x.Name);
+       }
+       catch (Exception e) {
+         throw WrapOracleException(e);
+       }
+    }
 
     public DocumentType Update(DocumentType updated) {
       try {
