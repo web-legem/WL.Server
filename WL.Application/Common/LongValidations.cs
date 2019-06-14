@@ -27,7 +27,7 @@ namespace WL.Application.Common {
     public static Func<long?, Validation<Error, long?>>
        ValidateMinValue(long? minValue)
        => (long? value)
-       => !value.HasValue || value.Value >= minValue
+       => value == null || (!value.HasValue || value.Value >= minValue)
           ? Success<Error, long?>(value)
           : Fail<Error, long?>(new Error());
 

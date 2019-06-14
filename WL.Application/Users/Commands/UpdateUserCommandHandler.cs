@@ -64,10 +64,9 @@ namespace WL.Application.Users.Commands {
                 ValidateNickname(x.Nickname),
                 validatePassword(x.Password),
                 ValidateEmail(x.Email),
-                ValidateRoleId(x.RoleId),
-                ValidateEntityId(x.EntityId)
+                ValidateRoleId(x.RoleId)
              )
-            .Apply((id, x1, x2, x3, x4, x5, x6, x7, x8) => msg)
+            .Apply((id, x1, x2, x3, x4, x5, x6, x7) => msg)
           select y;
 
     Validation<Error, UpdatePasswordCmd> ValidateUpdatePasswordMsg(UpdatePasswordCmd msg)
