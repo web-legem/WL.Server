@@ -78,6 +78,8 @@ namespace WL.Application.Users.Queries {
                };
                _CreRepo.Create(cre);
                Role role = _RoleRepo.Get(credential.token);
+               credential.entityId = user.EntityId;
+
                credential.permissions = new List<Perm>{
                      new Perm { Name = "configSystem", Can = role.ConfigSystem == 1 },
                      new Perm { Name = "createDocuments", Can = role.CreateDocuments == 1 },

@@ -26,8 +26,10 @@ namespace WL.Persistance.Annotations {
             .Include(d => d.File)
             .FirstOrDefault(d => d.Id == cmd.FromDocumentId));
 
-          if (from.File == null)
-            throw new FormFieldError(FormFieldError.notFound, "file");
+          if (from.File == null) {
+                  throw new FormFieldError(FormFieldError.notFound, "file");
+               }
+            
 
           var to = context.Documents.FirstOrDefault(d =>
             d.DocumentTypeId == cmd.ToDocumentTypeId

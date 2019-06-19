@@ -47,14 +47,8 @@ namespace WL.Api.Controllers {
     [HttpPost]
     public IActionResult Post([FromBody] CreateAnnotationCommand cmd)
      => createCommand.Execute(cmd).Match(
-       Succ: x => x.Match<IActionResult>(
-         y =>
-         Ok(y),
-         y =>
-         BadRequest(y)
-       ),
-       Fail: ex =>
-       StatusCode(500, ex)
+       Succ: x => x.Match<IActionResult>(Ok, BadRequest),
+       Fail: ex => StatusCode(500, ex)
        );
 
     [HttpDelete("{id}")]

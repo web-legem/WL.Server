@@ -11,6 +11,7 @@ namespace WL.Application.Users {
       public string token { get; set; }
       public Object permissions { get; set; }
       public String photo { get; set; }
+      public long? entityId { get; set; }
 
    }
 }
